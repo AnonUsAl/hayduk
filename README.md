@@ -1,119 +1,132 @@
-# Hayduk: Open-source Metasploit GUI and Armitage alternative
+# Hayduk：开源 Metasploit 图形界面，Armitage 的替代方案
 
 [![CI](https://github.com/jolovicdev/hayduk/actions/workflows/ci.yml/badge.svg)](https://github.com/jolovicdev/hayduk/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/jolovicdev/hayduk?display_name=tag)](https://github.com/jolovicdev/hayduk/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-informational)](LICENSE)
 
-Hayduk is a free, open-source **Metasploit GUI** for authorized penetration testing. It brings the Armitage workflow to your browser: map hosts, browse modules, manage Meterpreter and shell sessions, and export campaign reports.
+> **关于本仓库**
+>
+> 本仓库是 [jolovicdev/hayduk](https://github.com/jolovicdev/hayduk) 的 **简体中文汉化版**，
+> 汉化维护在 `zh-cn` 分支（当前为默认分支）。界面文案、本 README 与安全策略均已汉化。
+>
+> - 英文原版文档：[README.en.md](README.en.md) · [SECURITY.en.md](SECURITY.en.md)
+> - 上游原版预编译包：[原作者 Releases](https://github.com/jolovicdev/hayduk/releases)
+> - 汉化版获取方式见下方[「获取汉化版」](#获取汉化版)
+>
+> 汉化只改动界面文案与文档，**不触碰任何攻击逻辑、协议或与 Metasploit 的交互**。
 
-**Download one binary. Run it. Connect to Metasploit.** No Java, Go, or Node.js installation is required to run a release binary. The browser UI is included.
+Hayduk 是一款免费、开源的 **Metasploit 图形界面**，面向获得授权的渗透测试。它把 Armitage 的工作流搬进浏览器：绘制主机图谱、浏览模块、管理 Meterpreter 与 shell 会话、导出行动报告。
 
-Hayduk connects to a separate Metasploit Framework instance through `msfrpcd`. It does not bundle Metasploit.
+**下载一个二进制文件，运行它，连上 Metasploit。** 运行发布版二进制不需要安装 Java、Go 或 Node.js，浏览器界面已内置。
 
-**[Download the latest release](https://github.com/jolovicdev/hayduk/releases/latest)** · [Quickstart](#quickstart) · [Try the Docker lab](#try-the-docker-lab) · [Team mode](#team-mode)
+Hayduk 通过 `msfrpcd` 连接一个独立的 Metasploit Framework 实例，本身不随附 Metasploit。
 
-![Hayduk campaign overview with network topology, host inspection, module library, and live console](docs/screenshot.png)
+**[下载最新版本](https://github.com/jolovicdev/hayduk/releases/latest)** · [快速上手](#快速上手) · [试用 Docker 靶场](#试用-docker-靶场) · [团队模式](#团队模式)
 
-*Interface shown with illustrative campaign data.*
+![Hayduk 行动概览：网络拓扑、主机检查器、模块库与实时控制台](docs/screenshot.png)
 
-## Quickstart
+*界面截图中的行动数据为示意数据。*
 
-You need a Hayduk release binary, a browser, and a running Metasploit Framework instance. For workspace features such as hosts, services, credentials, and loot, Metasploit also needs a connected database.
+## 快速上手
 
-The steps below assume Hayduk and Metasploit run on the same machine. If you need a ready-made Metasploit setup with a database and disposable targets, use the [Docker lab](#try-the-docker-lab).
+你需要：一个 Hayduk 发布版二进制、一个浏览器、一个正在运行的 Metasploit Framework 实例。若要使用主机、服务、凭据、战利品这类工作区功能，Metasploit 还需连上数据库。
 
-### 1. Download and extract Hayduk
+以下步骤假定 Hayduk 与 Metasploit 跑在同一台机器上。如果你想要一套现成的、带数据库和可丢弃靶机的 Metasploit 环境，请用 [Docker 靶场](#试用-docker-靶场)。
 
-Open the [latest release](https://github.com/jolovicdev/hayduk/releases/latest) and choose the archive matching your operating system and processor. Extract the archive into a folder. There is no Hayduk installer or separate UI setup.
+### 1. 下载并解压 Hayduk
 
-### 2. Start Metasploit RPC
+打开[最新版本](https://github.com/jolovicdev/hayduk/releases/latest)，选择与你的操作系统和处理器架构匹配的压缩包，解压到一个文件夹。Hayduk 没有安装程序，也不需要单独安装界面。
 
-On the machine running Metasploit, open a terminal and run:
+汉化版请见[「获取汉化版」](#获取汉化版)。
+
+### 2. 启动 Metasploit RPC
+
+在运行 Metasploit 的机器上打开终端，执行：
 
 ```bash
 msfrpcd -P 'yourpassword' -S -f -a 127.0.0.1 -p 55553
 ```
 
-Replace `yourpassword` with your own password. Keep this terminal open. This command binds RPC to localhost on port `55553`; `-S` disables SSL for this local connection.
+把 `yourpassword` 换成你自己的密码。保持这个终端开着。该命令把 RPC 绑定在本机 `55553` 端口；`-S` 表示这条本地连接禁用 SSL。
 
-If you already run `msfrpcd`, use its existing connection settings instead of starting another instance.
+如果你已经在跑 `msfrpcd`，直接沿用它的连接参数即可，不必再起一个实例。
 
-### 3. Run Hayduk
+### 3. 运行 Hayduk
 
-Open another terminal in the extracted folder.
+在解压出的文件夹里另开一个终端。
 
-**Linux and macOS:**
+**Linux 与 macOS：**
 
 ```bash
 ./hayduk
 ```
 
-**Windows PowerShell:**
+**Windows PowerShell：**
 
 ```powershell
 .\hayduk.exe
 ```
 
-Hayduk opens the UI in your browser. If the browser does not open, copy the full URL printed in the terminal, including `?token=...`. The port is assigned automatically.
+Hayduk 会在浏览器里打开界面。如果浏览器没有自动打开，请把终端里打印的完整 URL 复制出来，**务必带上 `?token=...` 部分**。端口是自动分配的。
 
-### 4. Connect
+### 4. 连接
 
-In **Connect to msfrpcd**, enter the settings from step 2:
+在 **连接 msfrpcd** 对话框中，填入第 2 步的设置：
 
-| Field | Value |
+| 字段 | 值 |
 |---|---|
-| Host | `127.0.0.1` |
-| Port | `55553` |
-| User | `msf` |
-| Password | The password you set above |
-| use SSL | Unchecked |
+| 主机 | `127.0.0.1` |
+| 端口 | `55553` |
+| 用户名 | `msf` |
+| 密码 | 你在上面设置的密码 |
+| 使用 SSL | 不勾选 |
 
-Click **Connect**. A cold Metasploit instance can take about half a minute to respond; connection progress appears in the dialog.
+点击 **连接**。冷启动的 Metasploit 实例可能需要大约半分钟才响应，连接进度会显示在对话框里。
 
-Keep Hayduk running while you use the UI. Press `Ctrl+C` in its terminal to stop it.
+使用界面期间请保持 Hayduk 运行。要停止它，在它的终端里按 `Ctrl+C`。
 
-## Your first campaign
+## 你的第一次行动
 
-Use a system or network you are authorized to test. Scans run from the connected Metasploit instance, so targets must be reachable from that machine.
+请只对你有权测试的系统或网络使用本工具。扫描是从所连接的 Metasploit 实例发起的，因此目标必须能被那台机器访问到。
 
-Click a module to configure it. Right-click hosts, sessions, table rows, and modules in the tree to open their action menus.
+点击模块即可配置它。右键点击主机、会话、表格行和模块树中的模块，可以打开对应的操作菜单。
 
-Use the campaign summary cards to open hosts, services, sessions, or credentials. **Discover hosts**, **Scan services**, and **Export report** are also available directly above the network map.
+用行动摘要卡片可以展开主机、服务、会话或凭据。**发现主机**、**扫描服务**、**导出报告**也直接放在网络地图上方。
 
-The network map adapts host columns to the available canvas. Choose **Focus** to expand the map and host inspector. **Arrange hosts** replaces saved positions with an automatic layout. Host cards show open service counts and access state; violet paths identify pivot routes.
+网络地图会根据画布可用空间自适应主机列的排布。点击**专注**可以放大地图与主机检查器。**排列主机**会用自动布局替换已保存的位置。主机卡片上显示开放服务数量与访问状态；紫色路径标识跳板路由。
 
-1. **Choose a workspace.** Click the **workspace** chip to switch between existing Metasploit workspaces, or use the current workspace. The active workspace scopes the database tables, topology, and exported report, keeping each client's campaign data separate. Events and sessions retain their originating workspace for report attribution; the **Sessions** tab shows sessions across workspaces.
-2. **Discover hosts.** Open **Campaign → Discover hosts…**, enter your target host or CIDR range, select a scanner, and click **Configure…**. Review the module options and click **Launch**.
-3. **Scan and inspect services.** Open **Campaign → Scan services…** and configure a scan for your target. Review the options before launching it. Open **View → Topology** to see discovered hosts, or **View → Services** to inspect service results.
-4. **Launch an exploit and open a session.** Right-click an exploit module in the tree and choose **Launch…**, or open **Campaign → Find attacks…** and click a match's **Launch** button to prefill the target host and matched port. Review the module options and payload, then click **Launch**. If a session opens, click its row in the **Sessions** tab, or right-click its host and choose **Interact with session <ID>**, to open the live console in **Interact**.
-5. **Export a report.** Choose **File → Export report…** to download a self-contained HTML campaign report.
+1. **选择工作区。** 点击**工作区**标签可在已有的 Metasploit 工作区之间切换，或沿用当前工作区。当前工作区限定了数据库表、拓扑图与导出报告的范围，从而让每个客户的行动数据互相隔离。事件与会话会保留其来源工作区，便于报告归因；**会话**标签页则跨工作区显示所有会话。
+2. **发现主机。** 打开 **行动 → 发现主机…**，填入目标主机或 CIDR 范围，选择一个扫描器，点击**配置…**。检查模块选项后点击**启动**。
+3. **扫描并检查服务。** 打开 **行动 → 扫描服务…**，针对目标配置一次扫描。启动前先确认选项。打开 **视图 → 拓扑** 查看已发现的主机，或 **视图 → 服务** 检查服务扫描结果。
+4. **启动漏洞利用并打开会话。** 在模块树里右键点击某个漏洞利用模块，选择**启动…**；或者打开 **行动 → 查找攻击…**，点击某个匹配项的**启动**按钮，会自动填好目标主机与匹配到的端口。确认模块选项与载荷后点击**启动**。如果有会话上线，在**会话**标签页点击它的行，或右键点击对应主机并选择**与会话 &lt;ID&gt; 交互**，即可在**交互**页打开实时控制台。
+5. **导出报告。** 选择 **文件 → 导出报告…**，即可下载一份自包含的 HTML 行动报告。
 
-![Hayduk demo: select a host on the topology map and run commands in its live shell session](docs/demo.gif)
+![Hayduk 演示：在拓扑图上选一台主机，并在它的实时 shell 会话中执行命令](docs/demo.gif)
 
-*Demo uses illustrative campaign data.*
+*演示中的行动数据为示意数据。*
 
-## Features
+## 功能
 
-| Capability | What you can do |
+| 能力 | 你可以做什么 |
 |---|---|
-| Network topology | Explore adaptive subnet groups, host service counts, and pivot routes. Drag hosts, zoom, or expand the map in Focus mode. |
-| Metasploit modules | Browse the module tree, inspect reliability ranks, configure options, and select payloads. |
-| Campaign workflows | Discover hosts, scan services, and find exploit candidates matching known services. |
-| Session management | Interact with Meterpreter and shell sessions, upgrade shells, and terminate sessions. |
-| Credentials and loot | Review workspace data and use recovered credentials in login workflows. |
-| Hail Mary | Launch matching exploits against selected hosts, with paced launches and an event log. |
-| Reporting | Export a self-contained HTML report for campaign review and client delivery. |
-| Team mode | Share a campaign with multiple operators on a trusted network. |
+| 网络拓扑 | 探索自适应网段分组、主机服务数量与跳板路由。拖动主机、缩放，或在专注模式下展开地图。 |
+| Metasploit 模块 | 浏览模块树、查看可靠性等级、配置选项并选择载荷。 |
+| 行动工作流 | 发现主机、扫描服务，并找出与已知服务匹配的漏洞利用候选。 |
+| 会话管理 | 与 Meterpreter 和 shell 会话交互、升级 shell、终止会话。 |
+| 凭据与战利品 | 查看工作区数据，并在登录流程中使用已恢复的凭据。 |
+| 万福玛丽 | 对选中的主机批量发动匹配的漏洞利用模块，带有节奏控制与事件日志。 |
+| 报告 | 导出自包含的 HTML 报告，便于复盘与交付客户。 |
+| 团队模式 | 在可信网络中与多名操作员共享同一次行动。 |
 
-![Hayduk graph focus mode with adaptive subnet layout, host states, and a routed network](docs/topology.png)
+![Hayduk 图谱专注模式：自适应网段布局、主机状态与已路由网络](docs/topology.png)
 
-*Graph focus mode with illustrative campaign data.*
+*图谱专注模式，行动数据为示意数据。*
 
-## Try the Docker lab
+## 试用 Docker 靶场
 
-The repository includes a disposable Metasploit lab with a database and optional target containers. Run it to try the workflow from the demo against live targets.
+仓库内自带一套可丢弃的 Metasploit 靶场，包含数据库和可选的靶机容器。跑起来之后，就能用演示里的那套流程去打真实目标。
 
-You need Git, Docker, and Docker Compose. Run these commands from a shell that supports the repository's `.sh` scripts:
+你需要 Git、Docker 和 Docker Compose。请在支持仓库 `.sh` 脚本的 shell 中执行：
 
 ```bash
 git clone https://github.com/jolovicdev/hayduk.git
@@ -121,105 +134,125 @@ cd hayduk
 scripts/msf/up.sh --with-vulnbox
 ```
 
-The script prints the target container IP addresses when the lab is ready. Start your downloaded Hayduk binary and connect with **Host** `127.0.0.1`, **Port** `55553`, **User** `msf`, **Password** `testpass123`, and **use SSL** unchecked. Use a printed target IP for your first scan.
+靶场就绪时，脚本会打印出靶机容器的 IP 地址。启动你下载好的 Hayduk 二进制，用**主机** `127.0.0.1`、**端口** `55553`、**用户名** `msf`、**密码** `testpass123` 连接，**使用 SSL** 不勾选。第一次扫描就用打印出来的靶机 IP。
 
-To start only Metasploit and its database, run `scripts/msf/up.sh` without `--with-vulnbox`.
+只想启动 Metasploit 及其数据库，就运行不带 `--with-vulnbox` 的 `scripts/msf/up.sh`。
 
-When finished, run this from the repository root. It removes the lab containers and their volumes, including lab database data:
+用完后，在仓库根目录执行下面这条命令。它会删除靶场容器及其数据卷，**包括靶场数据库里的数据**：
 
 ```bash
 scripts/msf/down.sh
 ```
 
-## Team mode
+## 团队模式
 
-Run the downloaded binary with a specific interface address that your operators can reach:
+用操作员能访问到的具体网卡地址运行下载好的二进制：
 
 ```bash
 ./hayduk --team --listen 192.168.1.10:8787
 ```
 
-Replace `192.168.1.10` with your machine's address. Team mode requires an explicit, non-loopback address; wildcard addresses such as `0.0.0.0` are refused.
+把 `192.168.1.10` 换成你本机的地址。团队模式要求显式指定一个非回环地址；`0.0.0.0` 这类通配地址会被拒绝。
 
-Share the full token URL printed in the terminal. Each operator opens it in a browser and chooses a name. The event log attributes actions to those names.
+把终端里打印的带令牌完整 URL 分享出去。每位操作员在浏览器打开它并取一个名字，事件日志会把这些名字标注到对应的操作上。
 
-Team mode uses one shared token and plain HTTP. Operator names are labels, not verified identities. Treat the token URL like a password and use team mode only on trusted networks. Read the [security policy](SECURITY.md) for the full trust model.
+团队模式共用一个令牌，且是明文 HTTP。操作员名字只是标签，不是经过验证的身份。请把令牌 URL 当作密码对待，并且只在可信网络中使用团队模式。完整的信任模型见[安全策略](SECURITY.md)。
 
-## Troubleshooting
+## 故障排查
 
-| Problem | What to check |
+| 问题 | 检查什么 |
 |---|---|
-| The browser does not open | Open the full token URL printed by Hayduk. You can also start with `./hayduk --no-browser`. |
-| Hayduk cannot connect | Check that `msfrpcd` is running and that the host, port, user, and password match. |
-| SSL connection fails | Leave **use SSL** unchecked when `msfrpcd` runs with `-S`; enable it when the daemon uses SSL. |
-| Connection takes time | Watch the connection dialog. A cold Metasploit instance can take about half a minute to respond. |
-| Hosts or services are missing | Check the selected workspace, Metasploit's database connection, and target reachability from Metasploit. |
+| 浏览器没有打开 | 打开 Hayduk 打印的带令牌完整 URL。也可以用 `./hayduk --no-browser` 启动。 |
+| Hayduk 连不上 | 确认 `msfrpcd` 正在运行，且主机、端口、用户名、密码都匹配。 |
+| SSL 连接失败 | `msfrpcd` 以 `-S` 运行时要**不勾选**「使用 SSL」；守护进程用了 SSL 时才勾选。 |
+| 连接耗时长 | 留意连接对话框。冷启动的 Metasploit 实例可能需要大约半分钟才响应。 |
+| 主机或服务缺失 | 检查所选工作区、Metasploit 的数据库连接，以及目标能否从 Metasploit 一侧访问。 |
 
-## FAQ
+## 常见问题
 
-### Is Hayduk an Armitage alternative?
+### Hayduk 是 Armitage 的替代品吗？
 
-Yes. Hayduk follows Armitage's graphical Metasploit workflow, including network topology, module launching, Hail Mary, and shared campaigns. It is a separate implementation with a browser UI and a single Go binary.
+是。Hayduk 沿用了 Armitage 的图形化 Metasploit 工作流，包括网络拓扑、模块启动、万福玛丽和共享行动。它是一个独立实现，采用浏览器界面，并且是单个 Go 二进制。
 
-### Does Hayduk include Metasploit Framework?
+### Hayduk 包含 Metasploit Framework 吗？
 
-No. Hayduk is a GUI client for Metasploit's `msfrpcd` service. Use your existing Metasploit installation or the included Docker lab.
+不包含。Hayduk 是面向 Metasploit `msfrpcd` 服务的图形客户端。请使用你已有的 Metasploit 安装，或使用仓库自带的 Docker 靶场。
 
-### Do I need Go, Node.js, Java, or Docker?
+### 我需要 Go、Node.js、Java 或 Docker 吗？
 
-No additional language runtime is required for the Hayduk release binary. Go and Node.js are needed to build from source. Docker is needed only if you choose the included lab.
+运行 Hayduk 发布版二进制不需要任何额外的语言运行时。从源码构建需要 Go 与 Node.js。只有在你选择使用自带靶场时才需要 Docker。
 
-### Can Hayduk connect to Metasploit on another machine?
+### Hayduk 能连接另一台机器上的 Metasploit 吗？
 
-Yes. Enter the Metasploit machine's reachable address in **Host** and match its RPC port, credentials, and SSL setting. The localhost-only RPC command in Quickstart accepts connections only from the same machine.
+可以。在**主机**里填入那台 Metasploit 机器可达的地址，并匹配它的 RPC 端口、凭据与 SSL 设置。快速上手里那条仅绑定 localhost 的 RPC 命令只接受来自同一台机器的连接。
 
-### Is Hayduk free and open source?
+### Hayduk 是免费开源的吗？
 
-Yes. Hayduk is released under the [MIT license](LICENSE).
+是。Hayduk 以 [MIT 许可证](LICENSE)发布。
 
-## Build from source
+## 从源码构建
 
-For development, use Go 1.26.1 or newer, Node.js 24 as used in CI, npm, and Make. From the repository root:
+开发请使用 Go 1.26.1 或更新版本、CI 所用的 Node.js 24、npm 与 Make。在仓库根目录执行：
 
 ```bash
 make
 ./bin/hayduk
 ```
 
-`make` installs UI dependencies, builds and embeds the UI, and compiles `bin/hayduk`.
+`make` 会安装前端依赖、构建并嵌入界面，然后编译出 `bin/hayduk`。
 
-### Development
+### 开发
 
-After the initial build, run the UI server in one terminal:
+首次构建完成后，在一个终端里运行前端开发服务器：
 
 ```bash
 cd ui
 npm run dev
 ```
 
-In a second terminal at the repository root:
+在第二个终端里，于仓库根目录执行：
 
 ```bash
 make dev
 ```
 
-Open the URL printed by Hayduk. UI changes reload through the development proxy.
+打开 Hayduk 打印的 URL。界面改动会通过开发代理热重载。
 
-### Checks
+### 检查
 
-Run these commands from the repository root:
+在仓库根目录执行：
 
 ```bash
-make test          # Go and UI tests
+make test          # Go 与前端测试
 npm --prefix ui run lint
-make               # Type-check, build the UI, and compile the binary
-make integration   # Requires the running Docker lab
+make               # 类型检查、构建前端、编译二进制
+make integration   # 需要 Docker 靶场正在运行
 ```
 
-Protocol types are generated. With `tygo` available, run `make gen` after editing `internal/protocol/protocol.go`; `make gen-check` checks for generated type drift.
+协议类型是生成出来的。在具备 `tygo` 的前提下，修改 `internal/protocol/protocol.go` 后运行 `make gen`；`make gen-check` 用于检测生成类型是否漂移。
 
-## Credits and license
+## 获取汉化版
 
-Hayduk draws on the graphical attack management workflow established by [Armitage](https://github.com/rsmudge/armitage), created by Raphael Mudge. It connects to Metasploit through [go-msf](https://github.com/jolovicdev/go-msf).
+汉化只改了文案，所以**构建方式与原版完全一致**：
 
-Licensed under [MIT](LICENSE). See [third-party notices](docs/THIRD-PARTY-NOTICES.md) for bundled assets and licenses.
+```bash
+git clone https://github.com/AnonUsAl/hayduk.git
+cd hayduk && make
+./bin/hayduk
+```
+
+需要 Go 1.26.1+、Node.js、npm 与 Make（见[从源码构建](#从源码构建)）。
+
+汉化版未发布预编译压缩包；想要官方英文预编译包请到[原作者 Releases](https://github.com/jolovicdev/hayduk/releases)。
+
+### 汉化说明
+
+- 汉化提交在 `zh-cn` 分支，覆盖前端全部界面文案、`index.html` 元信息，以及 Go 侧 CLI 的 flag 说明与错误信息。
+- **有意保留英文**的部分：发往 `msfrpcd` 的控制台命令（`use X`、`set RHOSTS`）、终端提示符（`meterpreter 3 > `）、技术标识（`RHOSTS`、`LHOST`、`meterpreter`）与协议/服务名。
+- 上游升版后同步：`git fetch upstream && git checkout zh-cn && git rebase upstream/main`。
+
+## 致谢与许可
+
+Hayduk 借鉴了 [Armitage](https://github.com/rsmudge/armitage) 所确立的图形化攻击管理工作流，Armitage 由 Raphael Mudge 创建。Hayduk 通过 [go-msf](https://github.com/jolovicdev/go-msf) 连接 Metasploit。
+
+本项目以 [MIT 许可证](LICENSE)发布。随附资源及其许可证见[第三方声明](docs/THIRD-PARTY-NOTICES.md)。

@@ -581,10 +581,10 @@ export function TopologyGraph(props: {
                   <path class="topo-zone-link" d="M 10 11 L 17 8 M 10 13 L 17 16" />
                 </g>
                 <text class="topo-zone-name" x={group().x + 60} y={group().y + 31}>
-                  {key === "other" ? "OTHER HOSTS" : `${key}.0/24`}
+                  {key === "other" ? "其他主机" : `${key}.0/24`}
                 </text>
                 <text class="topo-zone-meta" x={group().x + group().w - 20} y={group().y + 31} text-anchor="end">
-                  {group().count} {group().count === 1 ? "HOST" : "HOSTS"}
+                  {group().count} 台主机
                 </text>
                 <Show when={routedKeys().has(key)}>
                   <text class="topo-zone-route-note" x={group().x + 60} y={group().y + 44}>已路由网络</text>
@@ -701,7 +701,7 @@ export function TopologyGraph(props: {
                 }}>
                 <rect class="topo-zone-chip-hit" x="-78" y="-16" width="156" height="32" rx="8" fill="transparent" />
                 <text class="topo-zone-chip-name" text-anchor="middle" y="4">
-                  {key === "other" ? "OTHER HOSTS" : `${key}.0/24`} · {count()}
+                  {key === "other" ? "其他主机" : `${key}.0/24`} · {count()}
                 </text>
               </g>
             )}</Show>;

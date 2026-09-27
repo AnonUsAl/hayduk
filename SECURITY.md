@@ -1,50 +1,30 @@
-# Security policy
+# 安全策略
 
-Hayduk is a graphical attack management console for Metasploit, for use
-against systems you are authorized to test. This file records the trust
-model so operators can decide where the tool may run.
+Hayduk 是一款用于 Metasploit 的图形化攻击管理控制台，请仅对你有权测试的系统使用。本文件记录其信任模型，便于操作员判断该工具适合在哪里运行。
 
-## Threat model
+## 威胁模型
 
-### The link between browser and hayduk
+### 浏览器与 hayduk 之间的链路
 
-Every hayduk instance is served behind a single bearer token: the one-time
-URL printed at startup (`http://host:port/?token=...`). Anyone who obtains
-that link gains full control of the connected msfrpcd session: launching
-exploits, reading credentials and loot, and driving sessions.
+每个 hayduk 实例都位于一个持有者令牌（bearer token）之后：即启动时打印的一次性 URL（`http://host:port/?token=...`）。任何拿到这个链接的人，都完全控制了所连接的 msfrpcd 会话：可以发动漏洞利用、读取凭据与战利品、操控会话。
 
-- The token is transmitted and stored in a plain HTTP cookie; there is no
-  TLS. Anyone who can read the network path between browser and hayduk
-  can capture it.
-- The URL (with token) appears in shell history and process listings of
-  the machine that launched hayduk.
+- 令牌通过明文 HTTP Cookie 传输与存储，全程没有 TLS。任何能读取浏览器与 hayduk 之间网络路径的人，都能截获它。
+- 带令牌的 URL 会出现在启动 hayduk 那台机器的 shell 历史与进程列表中。
 
-### Team mode
+### 团队模式
 
-Team mode (`--team`) exists for several operators on one shared campaign,
-and it inherits the same single-token design:
+团队模式（`--team`）是为多名操作员共享同一次行动而设，它沿用同一套单令牌设计：
 
-- The whole team shares one bearer link. There is no per-operator
-  authentication and no revocation of individual operators.
-- Operator labels are unauthenticated: any connected browser may claim
-  any name. Attribution in the event log is an aid to collaboration,
-  not an identity system.
-- All traffic is plain HTTP, including session output and credentials
-  shown in the UI.
+- 整个团队共用一个持有者链接。没有按操作员区分的认证，也无法单独吊销某个操作员。
+- 操作员标签未经认证：任何已连接的浏览器都可以声称自己是任何名字。事件日志中的归因只是协作辅助，不是身份系统。
+- 所有流量都是明文 HTTP，包括会话输出与界面中显示的凭据。
 
-Run team mode only on networks you trust, treat the token link exactly
-like a password, and prefer single-operator mode on a loopback bind
-whenever a shared campaign is not required.
+请只在可信网络中运行团队模式，把令牌链接严格当作密码对待；在不需要共享行动时，优先使用回环绑定下的单操作员模式。
 
-### The lab in scripts/msf
+### scripts/msf 中的靶场
 
-The disposable docker lab binds msfrpcd to 127.0.0.1 only, with a
-documented throwaway password. The vulnbox and sshbox containers publish
-no ports and are reachable only inside the lab network. Never point the
-lab's credentials or containers at production systems.
+可丢弃的 Docker 靶场只把 msfrpcd 绑定到 127.0.0.1，并使用一个已在文档中公开的一次性密码。vulnbox 与 sshbox 容器不发布任何端口，仅能在靶场网络内部访问。切勿把靶场的凭据或容器指向生产系统。
 
-## Reporting a vulnerability
+## 报告漏洞
 
-Open a private security advisory on GitHub (Report a vulnerability) or
-contact the maintainer at https://github.com/jolovicdev. Please do not
-open public issues for vulnerabilities.
+请在 GitHub 上开启一条私密安全公告（Report a vulnerability），或通过 https://github.com/jolovicdev 联系维护者。请勿为漏洞开启公开 issue。

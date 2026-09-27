@@ -46,7 +46,7 @@ export function UpgradeDialog(props: { sid: string; onClose: () => void }) {
       <div class="mbtns">
         <button class="abtn" style="flex:none; padding:0 20px" disabled={busy() || !valid()}
           onClick={() => void upgrade()}>
-          {busy() ? "Upgrading…" : "Upgrade"}
+          {busy() ? "升级中…" : "升级"}
         </button>
       </div>
     </Modal>

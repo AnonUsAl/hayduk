@@ -90,7 +90,7 @@ export function PivotDialog(props: { sid: string; meterpreter: boolean; onClose:
       <div class="mbtns">
         <button class="abtn" style="flex:none; padding:0 20px" disabled={busy() || !valid()}
           onClick={() => void pivot()}>
-          {busy() ? "Routing…" : "添加跳板路由"}
+          {busy() ? "路由中…" : "添加跳板路由"}
         </button>
       </div>
     </Modal>
