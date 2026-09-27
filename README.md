@@ -7,7 +7,7 @@
 > **关于本仓库**
 >
 > 本仓库是 [jolovicdev/hayduk](https://github.com/jolovicdev/hayduk) 的 **简体中文汉化版**，
-> 汉化维护在 `zh-cn` 分支（当前为默认分支）。界面文案、本 README 与安全策略均已汉化。
+> 汉化直接维护在 `main` 分支。界面文案、本 README 与安全策略均已汉化。
 >
 > - 英文原版文档：[README.en.md](README.en.md) · [SECURITY.en.md](SECURITY.en.md)
 > - 上游原版预编译包：[原作者 Releases](https://github.com/jolovicdev/hayduk/releases)
@@ -247,9 +247,15 @@ cd hayduk && make
 
 ### 汉化说明
 
-- 汉化提交在 `zh-cn` 分支，覆盖前端全部界面文案、`index.html` 元信息，以及 Go 侧 CLI 的 flag 说明与错误信息。
+- 汉化直接维护在 `main` 分支，覆盖前端全部界面文案、`index.html` 元信息，以及 Go 侧 CLI 的 flag 说明与错误信息。
 - **有意保留英文**的部分：发往 `msfrpcd` 的控制台命令（`use X`、`set RHOSTS`）、终端提示符（`meterpreter 3 > `）、技术标识（`RHOSTS`、`LHOST`、`meterpreter`）与协议/服务名。
-- 上游升版后同步：`git fetch upstream && git checkout zh-cn && git rebase upstream/main`。
+- 与上游同步：本仓库 `main` 含汉化提交，因此上游更新后需要合并而不是快进：
+
+  ```bash
+  git fetch upstream && git merge upstream/main
+  ```
+
+  合并冲突通常集中在 `internal/server/dist/`（构建产物）；重跑 `cd ui && npm run build && cp -r dist ../internal/server/dist` 即可覆盖。
 
 ## 致谢与许可
 
