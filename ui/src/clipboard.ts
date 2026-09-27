@@ -34,5 +34,5 @@ export async function copyText(text: string): Promise<boolean> {
 // copyWithFeedback is the context-menu flavor: every copy action reports
 // whether it actually reached the clipboard.
 export function copyWithFeedback(text: string) {
-  void copyText(text).then(ok => flash(ok ? "Copied" : "copy unavailable in this browser context"));
+  void copyText(text).then(ok => flash(ok ? "已复制" : "当前浏览器环境不支持复制"));
 }

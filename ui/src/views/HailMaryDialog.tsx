@@ -41,7 +41,7 @@ export function HailMaryDialog(props: { host?: string; onClose: () => void }) {
         maxPerHost: Number(maxPerHost()) || 10,
       });
       props.onClose();
-      flash(`hail mary under way: ${res.planned} launches planned; watch the event log`);
+      flash(`Hail Mary 已启动：计划发动 ${res.planned} 次；请查看事件日志`);
     } catch (e) {
       setError(e instanceof CommandError ? `${e.code}: ${e.message}` : String(e));
     } finally {
@@ -50,18 +50,17 @@ export function HailMaryDialog(props: { host?: string; onClose: () => void }) {
   }
 
   return (
-    <Modal title="Hail Mary" onClose={props.onClose} width="520px">
+    <Modal title="万福玛丽" onClose={props.onClose} width="520px">
       <p style="margin-top:4px; font:400 12px/1.55 var(--sans); color:var(--tx2)">
-        Run every matching exploit against the selected hosts in sequence. This can disrupt
-        target services. Matches use the same service names and OS family as Find attacks;
-        versions and patch levels are not checked.
+        按顺序对所选主机运行所有匹配的漏洞利用模块，这可能中断目标服务。
+        匹配依据与「查找攻击」相同（服务名 + 操作系统族），不校验版本与补丁级别。
       </p>
       <div style="margin-top:14px; display:flex; align-items:center; gap:8px">
         <button class="abtn" style="flex:none" onClick={toggleAll}>
-          {picked().size > 0 && allPicked() ? "clear all" : "select all"}
+          {picked().size > 0 && allPicked() ? "全部清除" : "全选"}
         </button>
         <label style="display:grid; gap:4px; width:110px">
-          <span style="font:500 11px var(--sans); color:var(--tx1)">Max per host</span>
+          <span style="font:500 11px var(--sans); color:var(--tx1)">每主机上限</span>
           <input value={maxPerHost()} inputmode="numeric"
             onInput={(e) => setMaxPerHost(e.currentTarget.value)} autocomplete="off" />
         </label>
@@ -79,7 +78,7 @@ export function HailMaryDialog(props: { host?: string; onClose: () => void }) {
       <div class="mbtns">
         <button class="abtn" style="flex:none; padding:0 20px; background:var(--red); border-color:var(--red); color:var(--tx0)"
           disabled={busy() || picked().size === 0} onClick={() => void launch()}>
-          {busy() ? "Launching…" : `Launch at ${picked().size} host${picked().size === 1 ? "" : "s"}`}
+          {busy() ? "启动中…" : `对 ${picked().size} 台主机启动`}
         </button>
       </div>
     </Modal>

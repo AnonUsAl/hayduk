@@ -16,7 +16,7 @@ export function Inspector(props: {
     const h = host();
     return h ? (credsByHostMemo().get(h.address) ?? []) : [];
   });
-  // only reachable rows: the count is labelled "Open services" and closed
+  // only reachable rows: the count is labelled "打开服务" and closed
   // ports are noise in an attack summary
   const services = createMemo(() => {
     const h = host();
@@ -25,13 +25,13 @@ export function Inspector(props: {
 
   return (
     <div class="ins">
-      <Show when={host()} fallback={<div class="ins-empty"><div class="empty-symbol"><i aria-hidden="true" class="ph ph-target"></i></div><h2>No host selected</h2><p>Select a host on the map or in Services to view its details and available actions.</p></div>}>
+      <Show when={host()} fallback={<div class="ins-empty"><div class="empty-symbol"><i aria-hidden="true" class="ph ph-target"></i></div><h2>未选择主机</h2><p>在地图或服务列表中选择一台主机，查看其详情与可用操作。</p></div>}>
         {(h) => <>
           <div class="ihost">
             <div>
               <div class="iname">{h().name || h().address}</div>
               <div class="ios">
-                {[h().osName, h().osFlavor, h().osVersion].filter(Boolean).join(" ") || "unknown os"}
+                {[h().osName, h().osFlavor, h().osVersion].filter(Boolean).join(" ") || "未知系统"}
               </div>
             </div>
           </div>
@@ -39,11 +39,11 @@ export function Inspector(props: {
           <div class="badges">
             <Show when={sessions().length > 0} fallback={
               creds().length > 0
-                ? <span class="bdg amb"><i aria-hidden="true" class="ph ph-key"></i>valid login found</span>
-                : <span class="bdg gry"><i aria-hidden="true" class="ph ph-x"></i>no access</span>
+                ? <span class="bdg amb"><i aria-hidden="true" class="ph ph-key"></i>已发现有效登录</span>
+                : <span class="bdg gry"><i aria-hidden="true" class="ph ph-x"></i>无访问权限</span>
             }>
-              <span class="bdg grn"><i aria-hidden="true" class="ph-fill ph-lightning"></i>access obtained</span>
-              <span class="bdg grn"><i aria-hidden="true" class="ph ph-pulse"></i>{sessions().length} session{sessions().length > 1 ? "s" : ""} live</span>
+              <span class="bdg grn"><i aria-hidden="true" class="ph-fill ph-lightning"></i>已获得访问</span>
+              <span class="bdg grn"><i aria-hidden="true" class="ph ph-pulse"></i>{sessions().length} 个活动会话</span>
             </Show>
           </div>
 
@@ -52,14 +52,14 @@ export function Inspector(props: {
           </Show>
 
           <div class="isec">
-            <div class="ilabel">Host</div>
-            <div class="kv"><b>Address</b><span>{h().address}</span></div>
+            <div class="ilabel">主机</div>
+            <div class="kv"><b>地址</b><span>{h().address}</span></div>
             <Show when={h().mac}><div class="kv"><b>MAC</b><span>{h().mac}</span></div></Show>
-            <div class="kv"><b>Open services</b><span>{services().length}</span></div>
+            <div class="kv"><b>打开服务</b><span>{services().length}</span></div>
           </div>
 
           <div class="isec">
-            <div class="ilabel">Services</div>
+            <div class="ilabel">服务</div>
             <For each={services()}>{(s) => (
               <div class="portrow">
                 <span class="pchip">{s!.port}/{s!.proto}</span>
@@ -70,26 +70,26 @@ export function Inspector(props: {
           </div>
 
           <div class="isec">
-            <div class="ilabel">Access</div>
+            <div class="ilabel">访问</div>
             <div class="acc">
               <Show when={sessions().length > 0} fallback={
                 <div class="aline">
-                  <b>{creds().length > 0 ? "Valid credentials found" : "No access on this host"}</b>
+                  <b>{creds().length > 0 ? "已找到可用凭据" : "该主机暂无可访问凭据"}</b>
                   <div class="abtns">
                     <button class="abtn" onClick={() => props.onLogin(h().address)}>
-                      <i aria-hidden="true" class="ph ph-key"></i>Login as…
+                      <i aria-hidden="true" class="ph ph-key"></i>以…登录
                     </button>
                   </div>
                 </div>
               }>
                 <For each={sessions()}>{(s) => (
                   <>
-                    <div class="aline"><b>Session {s!.id}</b> · {s!.type}</div>
-                    <div class="aline">{s!.username || "unknown user"}</div>
-                    <div class="aline">via {s!.viaExploit}</div>
+                    <div class="aline"><b>会话 {s!.id}</b> · {s!.type}</div>
+                    <div class="aline">{s!.username || "未知用户"}</div>
+                    <div class="aline">经 {s!.viaExploit}</div>
                     <div class="abtns">
                       <button class="abtn" onClick={() => props.onInteract(s!.id)}>
-                        <i aria-hidden="true" class="ph ph-terminal-window"></i>Interact
+                        <i aria-hidden="true" class="ph ph-terminal-window"></i>交互
                       </button>
                     </div>
                   </>

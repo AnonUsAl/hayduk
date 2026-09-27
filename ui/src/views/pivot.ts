@@ -78,11 +78,11 @@ export function removeRouteItems(
 ): MenuItem[] {
   const live = routes.filter(r => r.subnet && r.sessionId);
   if (live.length === 0) return [];
-  const items: MenuItem[] = [{ head: live[0]!.subnet, sub: "pivot route" }];
+  const items: MenuItem[] = [{ head: live[0]!.subnet, sub: "pivot 路由" }];
   for (const route of live) {
     items.push({
       icon: "signpost",
-      label: `Remove route via session ${route.sessionId}`,
+      label: `移除经会话 ${route.sessionId} 的路由`,
       danger: true,
       fn: () => onRemove(route),
     });

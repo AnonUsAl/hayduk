@@ -24,17 +24,17 @@ export function SessionsView(props: { onInteract: (sid: string) => void }) {
 
   function menuItems(row: SessionState): Parameters<typeof openContextMenuFor>[1] {
     const items: Parameters<typeof openContextMenuFor>[1] = [
-      { head: `Session ${row.id}`, sub: row.username || row.info || row.targetHost },
-      { icon: "terminal-window", label: "Interact", fn: () => props.onInteract(row.id) },
+      { head: `会话 ${row.id}`, sub: row.username || row.info || row.targetHost },
+      { icon: "terminal-window", label: "交互", fn: () => props.onInteract(row.id) },
     ];
     if (row.type === "shell") {
-      items.push({ icon: "arrows-clockwise", label: "Upgrade to meterpreter…", fn: () => setUpgrading(row.id) });
+      items.push({ icon: "arrows-clockwise", label: "升级到 meterpreter…", fn: () => setUpgrading(row.id) });
     }
     items.push(
-      { icon: "signpost", label: "Pivot network…", fn: () => setPivoting(row.id) },
-      { icon: "x", label: "Kill session", danger: true, fn: () => void kill(row.id) },
+      { icon: "signpost", label: "跳板网络…", fn: () => setPivoting(row.id) },
+      { icon: "x", label: "终止会话", danger: true, fn: () => void kill(row.id) },
       { sep: true },
-      { icon: "copy", label: "Copy user", fn: () => copyWithFeedback(row.username ?? "") },
+      { icon: "copy", label: "复制用户名", fn: () => copyWithFeedback(row.username ?? "") },
     );
     return items;
   }
@@ -54,7 +54,7 @@ export function SessionsView(props: { onInteract: (sid: string) => void }) {
 
   function kill(sid: string) {
     ws.command("session.stop", { sid })
-      .catch((e: any) => flash(e?.message ?? `could not stop session ${sid}`));
+      .catch((e: any) => flash(e?.message ?? `无法停止会话 ${sid}`));
   }
 
   function pivotType(sid: string | undefined) {
@@ -67,9 +67,9 @@ export function SessionsView(props: { onInteract: (sid: string) => void }) {
       <DataTable
         rows={rows()}
         rowKey={(r) => r.id}
-        emptyTitle="No sessions"
+        emptyTitle="暂无会话"
         emptyIcon="broadcast"
-        empty="Sessions appear here when an exploit or handler opens a connection."
+        empty="当漏洞利用或监听器建立连接后，会话会显示在这里。"
         onRowClick={(r) => props.onInteract(r.id)}
         onRowContextMenu={menu}
         columns={[
@@ -84,7 +84,7 @@ export function SessionsView(props: { onInteract: (sid: string) => void }) {
           {
             key: "actions", label: "", width: "44px",
             render: (r) => (
-              <button class="rowmenu" aria-label={`Actions for session ${r.id}`} title="Session actions"
+              <button class="rowmenu" aria-label={`会话 ${r.id} 的操作`} title="会话操作"
                 onClick={(e) => rowMenuButton(r, e)}>
                 <i aria-hidden="true" class="ph ph-dots-three"></i>
               </button>

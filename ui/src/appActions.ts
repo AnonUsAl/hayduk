@@ -10,9 +10,9 @@ export function switchWorkspaceAction(opts: {
     try {
       await opts.command("workspace.set", { name });
       opts.onSwitched();
-      opts.flash(`switched to workspace ${name}`);
+      opts.flash(`已切换到工作区 ${name}`);
     } catch (e: any) {
-      opts.flash(e?.message ?? "workspace switch failed");
+      opts.flash(e?.message ?? "工作区切换失败");
     }
   };
 }

@@ -43,7 +43,7 @@ export function Modal(props: { title: string; onClose: () => void; children: JSX
           <div>
             <div class="mtitle" id={titleId}>{props.title}</div>
           </div>
-          <button class="zbtn" style="margin-left:auto" onClick={props.onClose} aria-label="Close">
+          <button class="zbtn" style="margin-left:auto" onClick={props.onClose} aria-label="关闭">
             <i class="ph ph-x"></i>
           </button>
         </div>

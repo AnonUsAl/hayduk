@@ -10,7 +10,7 @@ describe("switchWorkspaceAction", () => {
       flash: m => events.push(m),
     });
     await sw("lab");
-    expect(events).toEqual(["selection-dropped", "switched to workspace lab"]);
+    expect(events).toEqual(["selection-dropped", "已切换到工作区 lab"]);
   });
 
   it("keeps the selection and flashes when the switch fails", async () => {

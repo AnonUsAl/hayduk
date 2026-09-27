@@ -20,12 +20,12 @@ import (
 var version = "0.1.5"
 
 func main() {
-	listen := flag.String("listen", "127.0.0.1:0", "host:port to bind")
-	team := flag.Bool("team", false, "shared campaign for several operators on a trusted network")
-	dev := flag.Bool("dev", false, "proxy UI to a vite dev server")
-	devUpstream := flag.String("dev-upstream", "http://127.0.0.1:5173", "vite dev server URL")
-	noBrowser := flag.Bool("no-browser", false, "do not open a browser")
-	showVersion := flag.Bool("version", false, "print version and exit")
+	listen := flag.String("listen", "127.0.0.1:0", "绑定的 host:port")
+	team := flag.Bool("team", false, "在可信网络中供多名操作员共享的行动")
+	dev := flag.Bool("dev", false, "把界面代理到 vite 开发服务器")
+	devUpstream := flag.String("dev-upstream", "http://127.0.0.1:5173", "vite 开发服务器地址")
+	noBrowser := flag.Bool("no-browser", false, "不自动打开浏览器")
+	showVersion := flag.Bool("version", false, "输出版本号后退出")
 	flag.Parse()
 
 	if *showVersion {
@@ -41,18 +41,18 @@ func main() {
 	})
 	if *team {
 		if !listenSet {
-			fmt.Fprintln(os.Stderr, "hayduk: --team needs an explicit --listen bind, e.g. --listen 192.168.1.10:8787")
+			fmt.Fprintln(os.Stderr, "hayduk: --team 需要显式指定 --listen 绑定，例如 --listen 192.168.1.10:8787")
 			os.Exit(1)
 		}
 		if host, _, err := net.SplitHostPort(*listen); err == nil {
 			if wildcardHost(host) {
 				// a wildcard cannot be advertised: remote operators would be
 				// handed an unusable http://[::]:port link
-				fmt.Fprintln(os.Stderr, "hayduk: --team needs a specific interface address, not a wildcard bind; find one with `ip addr`, e.g. --listen 192.168.1.10:8787")
+				fmt.Fprintln(os.Stderr, "hayduk: --team 需要一个具体的网卡地址，而不是通配绑定；可用 `ip addr` 查看，例如 --listen 192.168.1.10:8787")
 				os.Exit(1)
 			}
 			if loopbackOnly(host) {
-				fmt.Fprintln(os.Stderr, "hayduk: --team needs a non-loopback --listen bind; operators connect from other machines")
+				fmt.Fprintln(os.Stderr, "hayduk: --team 需要一个非回环的 --listen 绑定；操作员要从其他机器接入")
 				os.Exit(1)
 			}
 		}
@@ -60,7 +60,7 @@ func main() {
 
 	tokenBytes := make([]byte, 16)
 	if _, err := rand.Read(tokenBytes); err != nil {
-		fmt.Fprintln(os.Stderr, "hayduk: cannot generate token:", err)
+		fmt.Fprintln(os.Stderr, "hayduk: 无法生成令牌:", err)
 		os.Exit(1)
 	}
 	token := hex.EncodeToString(tokenBytes)
@@ -76,14 +76,14 @@ func main() {
 
 	url, err := srv.Listen(*listen)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "hayduk: listen:", err)
+		fmt.Fprintln(os.Stderr, "hayduk: 监听失败:", err)
 		os.Exit(1)
 	}
 
 	fmt.Println("hayduk", version, "-", url)
 	fmt.Println(url + "/?token=" + token)
 	if *team {
-		fmt.Println("team mode: share that link with operators on a trusted network; it carries the auth token")
+		fmt.Println("团队模式：请把该链接分享给可信网络中的操作员；链接内含认证令牌")
 	}
 
 	if !*noBrowser && !*team {

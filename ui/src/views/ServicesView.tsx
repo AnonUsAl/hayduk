@@ -13,15 +13,15 @@ export function ServicesView(props: { onInspect: (addr: string) => void; selecte
         rows={rows()}
         rowKey={(r) => r.host}
         selectedKey={() => props.selected}
-        emptyTitle="No services"
+        emptyTitle="暂无服务"
         emptyIcon="stack"
-        empty="No services discovered yet; run a services scan or open a host in the inspector."
+        empty="尚未发现服务；请执行服务扫描，或在检查器中打开主机。"
         onRowClick={(r) => props.onInspect(r.host)}
         onRowContextMenu={(r, e) => {
           openContextMenuFor(e, [
             { head: `${r.host}:${r.port}`, sub: `${r.proto} ${r.name}` },
-            { icon: "info", label: "Inspect host", fn: () => props.onInspect(r.host) },
-            { icon: "copy", label: "Copy address", hint: r.host, fn: () => copyWithFeedback(r.host) },
+            { icon: "info", label: "查看主机", fn: () => props.onInspect(r.host) },
+            { icon: "copy", label: "复制地址", hint: r.host, fn: () => copyWithFeedback(r.host) },
           ]);
         }}
         columns={[

@@ -51,14 +51,14 @@ export function LoginDialog(props: { host: string; onClose: () => void }) {
   }
 
   return (
-    <Modal title={`Login as ${props.host}`} onClose={props.onClose} width="480px">
+    <Modal title={`以 ${props.host} 登录`} onClose={props.onClose} width="480px">
       <Show when={modules().length > 0} fallback={
         <p style="color:var(--red-br); margin-top:4px">
-          No SMB or SSH service known on this host. Scan it first, or pick a login module from the tree.
+          该主机暂无已知的 SMB 或 SSH 服务。请先扫描，或从模块树中选择登录模块。
         </p>
       }>
         <label style="margin-top:4px; display:grid; gap:4px">
-          <span style="font:500 11px var(--sans); color:var(--tx1)">Login module</span>
+          <span style="font:500 11px var(--sans); color:var(--tx1)">登录模块</span>
           <select value={chosenMod()?.module ?? ""} onChange={(e) => setMod(e.currentTarget.value)}>
             <For each={modules()}>{(m) => <option value={m.module}>{m.module}</option>}</For>
           </select>
@@ -67,12 +67,12 @@ export function LoginDialog(props: { host: string; onClose: () => void }) {
         <Show when={creds().length > 0}>
           <label style="margin-top:10px; display:grid; gap:4px">
             <span style="font:500 11px var(--sans); color:var(--tx1)">
-              Recovered credentials <span style="color:var(--tx2)">(from the creds table)</span>
+              已获取凭据 <span style="color:var(--tx2)">（来自凭据表）</span>
             </span>
             <select value={String(credIdx())} onChange={(e) => pickCred(Number(e.currentTarget.value))}>
-              <option value="-1">Manual entry</option>
+              <option value="-1">手动输入</option>
               <For each={creds()}>{(c, i) => (
-                <option value={i()}>{`${c.user || "?"} / ${c.pass ? "•".repeat(Math.min(c.pass.length, 12)) : "no password"}`}</option>
+                <option value={i()}>{`${c.user || "?"} / ${c.pass ? "•".repeat(Math.min(c.pass.length, 12)) : "无密码"}`}</option>
               )}</For>
             </select>
           </label>
@@ -80,12 +80,12 @@ export function LoginDialog(props: { host: string; onClose: () => void }) {
 
         <div style="margin-top:10px; display:grid; grid-template-columns:1fr 1fr; gap:10px">
           <label style="display:grid; gap:4px">
-            <span style="font:500 11px var(--sans); color:var(--tx1)">User</span>
+            <span style="font:500 11px var(--sans); color:var(--tx1)">用户名</span>
             <input value={user()} onInput={(e) => setUser(e.currentTarget.value)}
               autocomplete="off" spellcheck={false} />
           </label>
           <label style="display:grid; gap:4px">
-            <span style="font:500 11px var(--sans); color:var(--tx1)">Password</span>
+            <span style="font:500 11px var(--sans); color:var(--tx1)">密码</span>
             <input type="password" value={pass()} onInput={(e) => setPass(e.currentTarget.value)}
               autocomplete="off" />
           </label>
@@ -95,7 +95,7 @@ export function LoginDialog(props: { host: string; onClose: () => void }) {
 
         <div class="mbtns">
           <button class="abtn" style="flex:none; padding:0 20px" disabled={busy()} onClick={() => void launch()}>
-            {busy() ? "Launching…" : "Launch login attack"}
+            {busy() ? "正在启动…" : "启动登录爆破"}
           </button>
         </div>
       </Show>

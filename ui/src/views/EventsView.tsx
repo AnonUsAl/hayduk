@@ -7,7 +7,7 @@ export function EventsView() {
       <Show when={eventGap()}>
         <div class="evline">
           <time></time>
-          <p style="color:var(--red-br)">event gap detected: events may be incomplete until reconnect</p>
+          <p style="color:var(--red-br)">检测到事件间隙：重连前事件可能不完整</p>
         </div>
       </Show>
       <For each={events().slice().reverse()}>{(ev) => (
@@ -20,7 +20,7 @@ export function EventsView() {
             : undefined
           }>
             {ev.text}
-            <Show when={ev.operator}><span class="opchip" title={`operator ${ev.operator}`}>{ev.operator}</span></Show>
+            <Show when={ev.operator}><span class="opchip" title={`操作员 ${ev.operator}`}>{ev.operator}</span></Show>
           </p>
         </div>
       )}</For>

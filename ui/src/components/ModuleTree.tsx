@@ -41,26 +41,26 @@ export function ModuleTree(props: { onLaunch: (type: string, path: string) => vo
     // empty collections are childless too, so they are excluded by path:
     // a type root's path is the bare type, a leaf's never is.
     if (node.children.length === 0 && node.path !== type) {
-      items.push({ icon: "rocket-launch", label: "Launch…", fn: () => props.onLaunch(type, node.path) });
+      items.push({ icon: "rocket-launch", label: "启动…", fn: () => props.onLaunch(type, node.path) });
     }
     items.push(
       { sep: true },
-      { icon: "copy", label: "Copy path", fn: () => copyWithFeedback(node.path) },
+      { icon: "copy", label: "复制路径", fn: () => copyWithFeedback(node.path) },
     );
     openContextMenuFor(e, items);
   }
 
   return (
     <Show when={root()} fallback={
-      <nav class="tree"><EmptyState icon="tree" title="No modules" body={total() === 0 ? "Connect to Metasploit to browse available modules." : "No modules match this build's catalogue."} /></nav>
+      <nav class="tree"><EmptyState icon="tree" title="暂无模块" body={total() === 0 ? "连接 Metasploit 后可浏览可用模块。" : "当前版本的模块库中没有匹配的模块。"} /></nav>
     }>
       {(r) => (
         <nav class="tree" classList={{ filtered: !!query() && keep().size === 0 }}>
           <div class="filterbox">
             <i aria-hidden="true" class="ph ph-magnifying-glass"></i>
-            <input placeholder="Filter modules" value={query()}
+            <input placeholder="筛选模块" value={query()}
               onInput={(e) => setQuery(e.currentTarget.value)} autocomplete="off" spellcheck={false}
-              aria-label="Filter modules" />
+              aria-label="筛选模块" />
           </div>
           <ul>
             <For each={r().children}>{(typeNode) =>
@@ -68,7 +68,7 @@ export function ModuleTree(props: { onLaunch: (type: string, path: string) => vo
                 keep={keep()} query={query()} onMenu={nodeMenu} onLaunch={props.onLaunch} />
             }</For>
           </ul>
-          <div class="noresult">No module matches that filter.</div>
+          <div class="noresult">没有模块匹配该筛选条件。</div>
         </nav>
       )}
     </Show>

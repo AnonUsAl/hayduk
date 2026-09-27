@@ -353,7 +353,7 @@ export function TopologyGraph(props: {
   // display its command error.
   function removeRoute(route: { subnet: string; sessionId: string }) {
     runAutoroute(autorouteRemove(route.sessionId, parseRouteTarget(route.subnet)))
-      .catch((e: any) => flash(e?.message ?? `could not remove route ${route.subnet}`));
+      .catch((e: any) => flash(e?.message ?? `无法移除路由 ${route.subnet}`));
   }
 
   function edgeMenu(edge: RouteEdge, event: MouseEvent) {
@@ -374,19 +374,19 @@ export function TopologyGraph(props: {
   function nodeMenu(address: string, event: MouseEvent) {
     props.onSelect(address);
     const hostAccess = access()(address);
-    const items: Parameters<typeof openContextMenuFor>[1] = [{ head: address, sub: "host" }];
+    const items: Parameters<typeof openContextMenuFor>[1] = [{ head: address, sub: "主机" }];
     for (const session of hostAccess.sessions) {
       items.push({
         icon: "terminal-window",
-        label: `Interact with session ${session.id}`,
+        label: `与会话 ${session.id} 交互`,
         fn: () => props.onInteract(session.id),
       });
     }
     items.push(
-      { icon: "rocket-launch", label: "Launch…", fn: () => props.onLaunch(address) },
-      { icon: "key", label: "Login as…", fn: () => props.onLogin(address) },
+      { icon: "rocket-launch", label: "启动…", fn: () => props.onLaunch(address) },
+      { icon: "key", label: "以…登录", fn: () => props.onLogin(address) },
       { sep: true },
-      { icon: "copy", label: "Copy address", hint: address, fn: () => copyWithFeedback(address) },
+      { icon: "copy", label: "复制地址", hint: address, fn: () => copyWithFeedback(address) },
     );
     openContextMenuFor(event, items);
   }
@@ -539,15 +539,15 @@ export function TopologyGraph(props: {
           dense map at this size — zoom into a subnet, or use the Services view
         </span>
       </Show>
-      <button onClick={() => { setSticky(new Map()); savePositions(new Map()); scheduleFit(); }} title="Arrange hosts to fit the canvas; replaces saved positions">
-        <i aria-hidden="true" class="ph ph-graph"></i>Arrange hosts
+      <button onClick={() => { setSticky(new Map()); savePositions(new Map()); scheduleFit(); }} title="让主机自动排列以适应画布；将覆盖已保存的位置">
+        <i aria-hidden="true" class="ph ph-graph"></i>排列主机
       </button>
     </div>
     <svg
       id="topo"
       ref={svgEl}
       role="group"
-      aria-label="Campaign network topology"
+      aria-label="行动网络拓扑"
       classList={{ lod: view().s < LOD_SCALE }}
       onWheel={onWheel}
       onPointerDown={onPointerDown}
@@ -587,7 +587,7 @@ export function TopologyGraph(props: {
                   {group().count} {group().count === 1 ? "HOST" : "HOSTS"}
                 </text>
                 <Show when={routedKeys().has(key)}>
-                  <text class="topo-zone-route-note" x={group().x + 60} y={group().y + 44}>ROUTED NETWORK</text>
+                  <text class="topo-zone-route-note" x={group().x + 60} y={group().y + 44}>已路由网络</text>
                   <circle class="topo-route-port" cx={group().x + group().w} cy={group().y + 30} r="4" />
                 </Show>
 
@@ -649,10 +649,10 @@ export function TopologyGraph(props: {
                     <text class="topo-node-address" x="16" y="72">{fitLabel(address, 25)}</text>
                     <circle class="topo-host-status" cx="18" cy="105" r="3" />
                     <text class="topo-host-state" x="28" y="109">
-                      {hostAccess().sessions.length > 0 ? `${hostAccess().sessions.length} live session${hostAccess().sessions.length === 1 ? "" : "s"}` : hostAccess().login ? "Login available" : "Discovered"}
+                      {hostAccess().sessions.length > 0 ? `${hostAccess().sessions.length} 个活动会话` : hostAccess().login ? "可登录" : "已发现"}
                     </text>
                     <text class="topo-host-services" x={NW - 14} y="109" text-anchor="end">
-                      {serviceCounts().get(address) ?? 0} service{serviceCounts().get(address) === 1 ? "" : "s"}
+                      {serviceCounts().get(address) ?? 0} 个服务
                     </text>
                   </g>
                 )}</Show>
@@ -672,9 +672,9 @@ export function TopologyGraph(props: {
                   <circle class="topo-ghost-icon" cx="25" cy="26" r="2.5" />
                   <path class="topo-ghost-link" d="M 14 18 L 23 13 M 14 20 L 23 25" />
                 </g>
-                <text class="topo-ghost-kicker" x="62" y="27">ROUTED NETWORK</text>
+                <text class="topo-ghost-kicker" x="62" y="27">已路由网络</text>
                 <text class="topo-ghost-address" x="62" y="51">{fitLabel(ghosts().get(key)!.label, 19)}</text>
-                <text class="topo-ghost-meta" x="62" y="74">AWAITING DISCOVERY</text>
+                <text class="topo-ghost-meta" x="62" y="74">等待发现</text>
               </g>
             )}</For>
           </g>
@@ -690,7 +690,7 @@ export function TopologyGraph(props: {
             const count = () => groups().get(key)?.count ?? 0;
             return <Show when={chip()}>{(c) => (
               <g class="topo-zone-chip" role="button" tabIndex={0} data-zone={key}
-                aria-label={`Zoom to ${key === "other" ? "other hosts" : `subnet ${key}.0/24`}`}
+                aria-label={`缩放到 ${key === "other" ? "其他主机" : `网段 ${key}.0/24`}`}
                 transform={`translate(${c().x} ${c().y})`}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" || e.key === " ") {
@@ -709,7 +709,7 @@ export function TopologyGraph(props: {
         </g>
       </Show>
     </svg>
-    <output class="map-scale" aria-label="Graph zoom">{Math.round(view().s * 100)}%</output>
+    <output class="map-scale" aria-label="拓扑缩放">{Math.round(view().s * 100)}%</output>
     </>
   );
 }

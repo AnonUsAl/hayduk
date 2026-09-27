@@ -32,16 +32,16 @@ export function friendlyConnectError(raw: string): { primary: string; detail: st
   const text = raw.trim();
   const lower = text.toLowerCase();
   if (lower.includes("login failed")) {
-    return { primary: "Login failed - msfrpcd rejected the username or password.", detail: text };
+    return { primary: "登录失败——msfrpcd 拒绝了该用户名或密码。", detail: text };
   }
   if (/connection refused|no connection could be made/.test(lower)) {
-    return { primary: "Connection refused - nothing is answering at that host and port; is msfrpcd running?", detail: text };
+    return { primary: "连接被拒绝——该主机端口无人应答，msfrpcd 是否已启动？", detail: text };
   }
   if (/timeout|timed out|deadline exceeded/.test(lower)) {
-    return { primary: "Timed out reaching msfrpcd - check the host, port, and SSL setting.", detail: text };
+    return { primary: "连接 msfrpcd 超时——请检查主机、端口与 SSL 设置。", detail: text };
   }
   if (/tls|ssl|handshake|http response to https/.test(lower)) {
-    return { primary: "Protocol mismatch - try toggling the SSL option to match how msfrpcd runs.", detail: text };
+    return { primary: "协议不匹配——请切换 SSL 选项，使其与 msfrpcd 的运行方式一致。", detail: text };
   }
   return { primary: text, detail: "" };
 }

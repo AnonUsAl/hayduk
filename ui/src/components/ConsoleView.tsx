@@ -83,11 +83,11 @@ export function ConsoleView(props: {
       <For each={lines()}>{(l) => <div class="cl out">{l || "\u00a0"}</div>}</For>
       <div class="inputline">
         <span class="pr">{props.prompt}</span>
-        <Show when={!props.busy} fallback={<span>framework is busy</span>}>
+        <Show when={!props.busy} fallback={<span>框架繁忙</span>}>
           <input ref={inputEl} value={input()}
             onInput={(e) => setInput(e.currentTarget.value)}
             onKeyDown={(e) => void onKey(e)}
-            placeholder={props.placeholder ?? "type a framework command"}
+            placeholder={props.placeholder ?? "输入框架命令"}
             autocomplete="off" spellcheck={false} />
         </Show>
       </div>

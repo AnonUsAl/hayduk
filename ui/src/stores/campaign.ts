@@ -2,7 +2,7 @@ import type { CampaignState, CredState, HostState, SessionState } from "../proto
 
 export function emptyState(): CampaignState {
   return {
-    connection: { status: "disconnected", host: "", port: 0, ssl: false, username: "", msfVersion: "", workspace: "" },
+    connection: { status: "已断开", host: "", port: 0, ssl: false, username: "", msfVersion: "", workspace: "" },
     hosts: [], services: [], sessions: {}, jobs: {}, routes: [], creds: [], loot: [],
     moduleRanks: {},
     operators: [],
@@ -45,7 +45,7 @@ export function applyResource(s: CampaignState, msg: any) {
     case "operators": s.operators = msg.operators ?? []; break;
     case "console": s.console = msg.console; break;
     case "interact": s.interact = msg.interact; break;
-    default: console.warn("unknown resource", msg.resource);
+    default: console.warn("未知资源", msg.resource);
   }
 }
 

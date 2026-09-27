@@ -11,15 +11,15 @@ export function CredsView() {
     <DataTable
       rows={rows()}
       rowKey={(r) => `${r.host}:${r.port}:${r.user}:${r.pass}`}
-      emptyTitle="No credentials"
+      emptyTitle="暂无凭据"
       emptyIcon="key"
-      empty="Recovered passwords and hashes appear here."
+      empty="已获取的密码与哈希会显示在这里。"
       onRowContextMenu={(r, e) => {
         openContextMenuFor(e, [
-          { head: r.user || "(no user)", sub: `recovered credential on ${r.host}` },
+          { head: r.user || "（无用户）", sub: `在 ${r.host} 上恢复的凭据` },
           { sep: true },
-          { icon: "copy", label: "Copy value", fn: () => copyWithFeedback(r.pass) },
-          { icon: "copy", label: "Copy user", fn: () => copyWithFeedback(r.user) },
+          { icon: "copy", label: "复制值", fn: () => copyWithFeedback(r.pass) },
+          { icon: "copy", label: "复制用户名", fn: () => copyWithFeedback(r.user) },
         ]);
       }}
       columns={[

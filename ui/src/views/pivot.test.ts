@@ -87,7 +87,7 @@ describe("removeRouteItems", () => {
     );
     expect(items[0]).toMatchObject({ head: "10.99.0.0/24" });
     const labels = items.filter(it => it.label).map(it => it.label);
-    expect(labels).toEqual(["Remove route via session 2", "Remove route via session 5"]);
+    expect(labels).toEqual(["移除经会话 2 的路由", "移除经会话 5 的路由"]);
     items.filter(it => it.fn)[1]!.fn!();
     expect(onRemove).toHaveBeenCalledWith({ subnet: "10.99.0.0/24", sessionId: "5" });
   });

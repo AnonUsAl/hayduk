@@ -15,15 +15,15 @@ export function JobsView(props: { onOpenModule?: (module: string) => void }) {
     <DataTable
       rows={rows()}
       rowKey={(r) => r.id}
-      emptyTitle="No jobs"
+      emptyTitle="暂无任务"
       emptyIcon="gear"
-      empty="No jobs running. Exploit handlers and long-running modules appear here the moment msf starts them."
+      empty="没有正在运行的任务。msf 一启动漏洞监听或长时间运行的模块，就会立即显示在这里。"
       onRowContextMenu={(r, e) => {
         openContextMenuFor(e, [
-          { head: `Job ${r.id}`, sub: r.module },
-          { icon: "copy", label: "Copy module path", fn: () => copyWithFeedback(r.module) },
+          { head: `任务 ${r.id}`, sub: r.module },
+          { icon: "copy", label: "复制模块路径", fn: () => copyWithFeedback(r.module) },
           { sep: true },
-          { icon: "terminal-window", label: "Open module in console", hint: "use",
+          { icon: "terminal-window", label: "在控制台中打开模块", hint: "use",
             fn: () => props.onOpenModule?.(r.module) },
         ]);
       }}

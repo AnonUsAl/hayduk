@@ -26,10 +26,9 @@ export function UpgradeDialog(props: { sid: string; onClose: () => void }) {
   }
 
   return (
-    <Modal title={`Upgrade session ${props.sid} to meterpreter`} onClose={props.onClose} width="440px">
+    <Modal title={`将会话 ${props.sid} 升级为 meterpreter`} onClose={props.onClose} width="440px">
       <p style="margin-top:4px; font:400 12px/1.55 var(--sans); color:var(--tx2)">
-        The framework spawns a meterpreter handler on this callback address and moves the shell over.
-        A new session appears when it checks in.
+        框架会在该回连地址上启动 meterpreter 监听，并把 shell 迁移过去。新会话上线后会出现在列表中。
       </p>
       <div style="margin-top:14px; display:grid; grid-template-columns:1.4fr 1fr; gap:10px">
         <label style="display:grid; gap:4px">

@@ -141,7 +141,7 @@ export function LaunchDialog(props: {
   }
 
   return (
-    <Modal title={`Launch ${props.path}`} onClose={props.onClose} width="560px">
+    <Modal title={`启动 ${props.path}`} onClose={props.onClose} width="560px">
       <Show when={!info.loading && !info.error && info()} fallback={
         <Show when={info.error} fallback={
           <div class="opt-skeleton tight" aria-hidden="true">
@@ -150,7 +150,7 @@ export function LaunchDialog(props: {
           </div>
         }>
           <p style="color:var(--red-br); margin-top:4px">
-            Could not load module info: {String((info.error as Error)?.message ?? info.error)}
+            无法加载模块信息：{String((info.error as Error)?.message ?? info.error)}
           </p>
         </Show>
       }>
@@ -186,12 +186,12 @@ export function LaunchDialog(props: {
       </Show>
       <Show when={options.error}>
         <p style="color:var(--red-br); margin-top:12px">
-          Could not load module options: {String((options.error as Error)?.message ?? options.error)}
+          无法加载模块选项：{String((options.error as Error)?.message ?? options.error)}
         </p>
       </Show>
       <Show when={payload() && payloadOptions.error}>
         <p style="color:var(--red-br); margin-top:12px">
-          Could not load payload options: {String((payloadOptions.error as Error)?.message ?? payloadOptions.error)}
+          无法加载载荷选项：{String((payloadOptions.error as Error)?.message ?? payloadOptions.error)}
         </p>
       </Show>
 
@@ -203,7 +203,7 @@ export function LaunchDialog(props: {
       </Show>
       <Show when={!payloads.loading && (payloads.latest?.length ?? 0) > 0}>
         <div style="margin-top:12px; display:grid; gap:4px">
-          <span style="font:500 11px var(--sans); color:var(--tx1)">Payload</span>
+          <span style="font:500 11px var(--sans); color:var(--tx1)">载荷</span>
           <FilterSelect
             options={(payloads.latest ?? []).map(p => ({ value: p, group: payloadGroup(p) }))}
             value={payload()} label="payloads" blankLabel="(default)"
@@ -245,7 +245,7 @@ export function LaunchDialog(props: {
             payloadError: !!payloadOptions.error,
             missing: blockers(),
           })} onClick={() => void launch()}>
-          {busy() ? "Launching…" : "Launch"}
+          {busy() ? "正在启动…" : "启动"}
         </button>
       </div>
     </Modal>

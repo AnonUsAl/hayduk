@@ -9,13 +9,13 @@ import { interactPrompt } from "./format";
 export function InteractView() {
   const session = () => campaignState().sessions[interactSID()];
   const placeholder = () => session()?.type === "meterpreter"
-    ? "type a meterpreter command"
-    : "type a shell command";
+    ? "输入 meterpreter 命令"
+    : "输入 shell 命令";
 
   return (
     <Show when={interactSID()} fallback={
       <div class="console">
-        <EmptyState icon="terminal-window" title="No session attached" body="Right-click a session or host and choose Interact." />
+        <EmptyState icon="terminal-window" title="未附加会话" body="右键单击会话或主机，选择「交互」。" />
       </div>
     }>
       <div style="padding:8px 12px 0; display:flex; gap:8px; align-items:center">
@@ -26,7 +26,7 @@ export function InteractView() {
         <span style="flex:1"></span>
         <button class="abtn" style="flex:none; padding:0 12px"
           onClick={() => void detach().catch((e: any) => flash(e?.message ?? "detach failed"))}>
-          <i class="ph ph-x"></i>Detach
+          <i class="ph ph-x"></i>分离
         </button>
       </div>
       <ConsoleView output={interactOutput}
@@ -35,7 +35,7 @@ export function InteractView() {
         placeholder={placeholder()}
         write={(cmd, target) => {
           void write(cmd, target ?? interactSID())
-            .catch((e: any) => flash(e?.message ?? "session write failed"));
+            .catch((e: any) => flash(e?.message ?? "会话写入失败"));
         }}
         tabComplete={async () => []} />
     </Show>

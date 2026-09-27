@@ -29,18 +29,18 @@ export function FindAttacksDialog(props: {
   };
 
   return (
-    <Modal title="Find attacks" onClose={props.onClose} width="600px">
+    <Modal title="查找攻击" onClose={props.onClose} width="600px">
       <p style="margin-top:4px; font:400 12px/1.55 var(--sans); color:var(--tx2)">
-        Matches use service names in module paths and the host's OS family.
-        Versions and patch levels are not checked. Verify compatibility before launching.
+        匹配依据是模块路径中的服务名与主机的操作系统族。
+        不校验版本与补丁级别，启动前请自行确认兼容性。
       </p>
       <Show when={hosts().length > 0} fallback={
         <p style="color:var(--red-br); margin-top:14px">
-          No hosts in the workspace yet; discover hosts first.
+          工作区中还没有主机；请先执行「发现主机」。
         </p>
       }>
         <div style="margin-top:14px; display:grid; gap:4px">
-          <span style="font:500 11px var(--sans); color:var(--tx1)">Host</span>
+          <span style="font:500 11px var(--sans); color:var(--tx1)">主机</span>
           <FilterSelect options={hosts().map(h => ({ value: h }))}
             value={host() ?? ""} label="hosts" onChange={setHost} />
         </div>
@@ -56,7 +56,7 @@ export function FindAttacksDialog(props: {
           {(r) => (
             <div style="margin-top:14px; display:grid; gap:6px; max-height:320px; overflow:auto; padding-right:6px">
               <For each={r().matches} fallback={
-                <p style="color:var(--tx2); text-align:center; padding:12px 0">No exploits matched this host's services.</p>
+                <p style="color:var(--tx2); text-align:center; padding:12px 0">没有与该主机服务匹配的漏洞利用模块。</p>
               }>
                 {(m) => (
                   <div class="fmatch">
@@ -66,7 +66,7 @@ export function FindAttacksDialog(props: {
                     </div>
                     <button class="abtn" style="flex:none"
                       onClick={() => props.onLaunch(m.name, r().host, m.port)}>
-                      <i class="ph ph-rocket-launch"></i>Launch
+                      <i class="ph ph-rocket-launch"></i>启动
                     </button>
                   </div>
                 )}

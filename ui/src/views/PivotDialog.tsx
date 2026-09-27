@@ -42,29 +42,28 @@ export function PivotDialog(props: { sid: string; meterpreter: boolean; onClose:
   }
 
   return (
-    <Modal title={`Pivot session ${props.sid}`} onClose={props.onClose} width="460px">
+    <Modal title={`跳板会话 ${props.sid}`} onClose={props.onClose} width="460px">
       <p style="margin-top:4px; font:400 12px/1.55 var(--sans); color:var(--tx2)">
-        Route traffic to another network through this session. The new pivot appears on the
-        topology as a dashed route edge.
+        将流量经此会话路由到其他网段。新的跳板会以虚线路径的形式显示在拓扑图上。
       </p>
       <div class="seg" style="margin-top:14px; display:inline-flex">
         <button classList={{ on: mode() === "auto" }} disabled={!props.meterpreter}
           onClick={() => setMode("auto")}>
-          Auto-detect
+          自动检测
         </button>
         <button classList={{ on: mode() === "manual" }} onClick={() => setMode("manual")}>
-          Manual subnet
+          手动网段
         </button>
       </div>
       <Show when={!props.meterpreter}>
         <p style="font:400 11px/1.5 var(--sans); color:var(--tx2); margin-top:8px">
-          Auto-detect needs a meterpreter session; enter the subnet by hand instead.
+          自动检测需要 meterpreter 会话；请改为手动输入网段。
         </p>
       </Show>
       <Show when={mode() === "manual"}>
         <div style="margin-top:12px; display:grid; grid-template-columns:1.6fr 1fr; gap:10px">
           <label style="display:grid; gap:4px">
-            <span style="font:500 11px var(--sans); color:var(--tx1)">Subnet</span>
+            <span style="font:500 11px var(--sans); color:var(--tx1)">网段</span>
             <input value={address()} placeholder="10.13.37.0"
               onInput={(e) => {
                 const value = e.currentTarget.value;
@@ -75,7 +74,7 @@ export function PivotDialog(props: { sid: string; meterpreter: boolean; onClose:
               autocomplete="off" spellcheck={false} />
           </label>
           <label style="display:grid; gap:4px">
-            <span style="font:500 11px var(--sans); color:var(--tx1)">Prefix</span>
+            <span style="font:500 11px var(--sans); color:var(--tx1)">前缀</span>
             <input value={prefix()} inputmode="numeric" placeholder="24"
               onInput={(e) => setPrefix(e.currentTarget.value)} autocomplete="off" />
           </label>
@@ -91,7 +90,7 @@ export function PivotDialog(props: { sid: string; meterpreter: boolean; onClose:
       <div class="mbtns">
         <button class="abtn" style="flex:none; padding:0 20px" disabled={busy() || !valid()}
           onClick={() => void pivot()}>
-          {busy() ? "Routing…" : "Add pivot route"}
+          {busy() ? "Routing…" : "添加跳板路由"}
         </button>
       </div>
     </Modal>

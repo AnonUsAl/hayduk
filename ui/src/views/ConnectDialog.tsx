@@ -58,31 +58,31 @@ export default function ConnectDialog(props: {
         <div class="mhead">
           <HaydukMark size={30} />
           <div>
-            <div class="eyebrow">METASPLOIT CONNECTION</div>
-            <div class="mtitle" id="connect-title">Connect to msfrpcd</div>
+            <div class="eyebrow">METASPLOIT 连接</div>
+            <div class="mtitle" id="connect-title">连接 msfrpcd</div>
           </div>
         </div>
 
-        <p>Enter the host, port, and credentials for your Metasploit RPC server.</p>
+        <p>填写 Metasploit RPC 服务器的主机、端口与凭据。</p>
         <Show when={connecting()} fallback={
           <>
             <div style="margin-top:16px; display:grid; gap:10px">
-              <label class="kv"><b>Host</b>
+              <label class="kv"><b>主机</b>
                 <input value={d().host}
                   onInput={(e) => setD({ ...d(), host: e.currentTarget.value })} />
               </label>
               <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
-                <label class="kv"><b>Port</b>
+                <label class="kv"><b>端口</b>
                   <input inputmode="numeric" value={d().port}
                     classList={{ invalid: !portValid() }}
                     onInput={(e) => setD({ ...d(), port: e.currentTarget.value })} />
                 </label>
-                <label class="kv"><b>User</b>
+                <label class="kv"><b>用户名</b>
                   <input value={d().username}
                     onInput={(e) => setD({ ...d(), username: e.currentTarget.value })} />
                 </label>
               </div>
-              <label class="kv"><b>Password</b>
+              <label class="kv"><b>密码</b>
                 <input type="password" value={password()} onInput={(e) => setPassword(e.currentTarget.value)} />
               </label>
               <label style="display:flex; gap:8px; align-items:center; font:400 12.5px var(--sans); color:var(--tx1)">
@@ -107,13 +107,13 @@ export default function ConnectDialog(props: {
 
             <div class="mbtns">
               <button class="abtn" type="submit" disabled={busy() || !valid()} style="flex:none; padding:0 20px">
-                {busy() ? "Connecting…" : "Connect"}
+                {busy() ? "正在连接…" : "连接"}
               </button>
             </div>
           </>
         }>
           <div style="margin-top:16px; display:grid; gap:8px; text-align:center">
-            <p style="margin:0; color:var(--tx0)">Connecting to <b>{props.conn.host}:{props.conn.port}</b>…</p>
+            <p style="margin:0; color:var(--tx0)">正在连接 <b>{props.conn.host}:{props.conn.port}</b>…</p>
             <p style="margin:0; font:400 11.5px var(--mono); color:var(--tx2)">{progress()}</p>
             <p style="margin:6px 0 0; font:400 11px var(--sans); color:var(--tx2)">
               a cold msfrpcd can take half a minute to answer; the link state is always in the status bar

@@ -54,15 +54,15 @@ export function FilterSelect(props: {
   return (
     <div class="fselect">
       <input value={filter()} onInput={(e) => setFilter(e.currentTarget.value)}
-        placeholder={`filter ${props.options.length} ${props.label}`}
-        aria-label={`Filter ${props.label}`}
+        placeholder={`筛选 ${props.options.length} 个 ${props.label}`}
+        aria-label={`筛选${props.label}`}
         autocomplete="off" spellcheck={false} />
-      <select ref={selectEl} value={props.value} aria-label={`Select ${props.label}`}
+      <select ref={selectEl} value={props.value} aria-label={`选择${props.label}`}
         onChange={(e) => props.onChange(e.currentTarget.value)}>
         <Show when={props.blankLabel}>
           <option value="">{props.blankLabel}</option>
         </Show>
-        <For each={groups()} fallback={<option value="" disabled>no matches</option>}>
+        <For each={groups()} fallback={<option value="" disabled>无匹配项</option>}>
           {([group, values]) => (
             <Show when={group} fallback={
               <For each={values}>{(v) => <option value={v}>{v}</option>}</For>

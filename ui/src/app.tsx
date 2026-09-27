@@ -31,13 +31,13 @@ import { switchWorkspaceAction } from "./appActions";
 import { DEFAULT_PANELS, clamp, clampNotebook, clampPanels, type PanelSizes } from "./stores/panels";
 
 const notebookTabs: [string, string, string][] = [
-  ["console", "terminal-window", "Console"],
-  ["interact", "terminal", "Interact"],
-  ["sessions", "broadcast", "Sessions"],
-  ["jobs", "gear", "Jobs"],
-  ["creds", "key", "Credentials"],
-  ["loot", "archive", "Loot"],
-  ["events", "pulse", "Events"],
+  ["console", "terminal-window", "控制台"],
+  ["interact", "terminal", "交互"],
+  ["sessions", "broadcast", "会话"],
+  ["jobs", "gear", "任务"],
+  ["creds", "key", "凭据"],
+  ["loot", "archive", "战利品"],
+  ["events", "pulse", "事件"],
 ];
 
 function loadPanels(): PanelSizes {
@@ -122,7 +122,7 @@ export default function App() {
     // the operator lands on an empty console with no clue why
     attach(sid).then(
       () => { setGraphFocus(false); setTab("interact"); },
-      (e: any) => flash(e?.message ?? `could not attach to session ${sid}`),
+      (e: any) => flash(e?.message ?? `无法附加到会话 ${sid}`),
     );
   }
 
@@ -149,7 +149,7 @@ export default function App() {
     await loadWorkspaces();
     const rect = anchor.getBoundingClientRect();
     openContextMenu(rect.left, rect.bottom + 4, [
-      { head: "Workspaces", sub: "switch the active msf workspace" },
+      { head: "工作区", sub: "切换当前 msf 工作区" },
       ...workspaces().map(w => ({
         label: w,
         icon: w === conn().workspace ? "check" : undefined,
@@ -192,9 +192,9 @@ export default function App() {
       a.download = `hayduk-report-${new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-")}.html`;
       a.click();
       URL.revokeObjectURL(url);
-      flash("report exported");
+      flash("报告已导出");
     } catch (e: any) {
-      flash(e.message ?? "report export failed");
+      flash(e.message ?? "报告导出失败");
     }
   }
 
@@ -227,55 +227,55 @@ export default function App() {
         <div class="brand">
           <HaydukMark size={21} />
           <span class="word">hayduk<span class="brand-dot">.</span></span>
-          <span class="brand-caption">SECURITY WORKSPACE</span>
+          <span class="brand-caption">安全工作区</span>
         </div>
 
-        <Dropdown id="m-file" label="File">
-          <MenuItemButton icon="plug" label="New connection…" onClick={() => disconnect()} />
-          <MenuItemButton icon="x" label="Disconnect" disabled={conn().status === "disconnected"}
+        <Dropdown id="m-file" label="文件">
+          <MenuItemButton icon="plug" label="新建连接…" onClick={() => disconnect()} />
+          <MenuItemButton icon="x" label="断开连接" disabled={conn().status === "disconnected"}
             onClick={() => disconnect()} />
           <div class="dsep"></div>
-          <MenuItemButton icon="download-simple" label="Export report…" onClick={() => void exportReport()} />
-          <MenuItemButton icon="info" label="About hayduk" onClick={() => setShowAbout(true)} />
+          <MenuItemButton icon="download-simple" label="导出报告…" onClick={() => void exportReport()} />
+          <MenuItemButton icon="info" label="关于 hayduk" onClick={() => setShowAbout(true)} />
         </Dropdown>
 
-        <Dropdown id="m-camp" label="Campaign">
-          <MenuItemButton icon="crosshair" label="Discover hosts…" disabled={conn().status !== "connected"}
+        <Dropdown id="m-camp" label="行动">
+          <MenuItemButton icon="crosshair" label="发现主机…" disabled={conn().status !== "connected"}
             onClick={() => setScan("discovery")} />
-          <MenuItemButton icon="wifi-high" label="Scan services…" disabled={conn().status !== "connected"}
+          <MenuItemButton icon="wifi-high" label="扫描服务…" disabled={conn().status !== "connected"}
             onClick={() => setScan("services")} />
-          <MenuItemButton icon="key" label="Brute force logins…" disabled={conn().status !== "connected"}
-            onClick={() => flash("right-click a host on the graph and pick Login as…")} />
+          <MenuItemButton icon="key" label="爆破登录…" disabled={conn().status !== "connected"}
+            onClick={() => flash("右键单击拓扑图中的主机，选择「以…登录」")} />
           <div class="dsep"></div>
-          <MenuItemButton icon="lightning" label="Find attacks…" disabled={conn().status !== "connected"}
+          <MenuItemButton icon="lightning" label="查找攻击…" disabled={conn().status !== "connected"}
             onClick={() => setFindOpen(true)} />
           <div class="dsep"></div>
-          <MenuItemButton icon="fire" label="Hail Mary…" disabled={conn().status !== "connected"}
+          <MenuItemButton icon="fire" label="万福玛丽…" disabled={conn().status !== "connected"}
             onClick={() => setHailOpen(true)} />
         </Dropdown>
 
-        <Dropdown id="m-view" label="View">
-          <MenuItemButton icon="graph" label="Topology" hint="1" onClick={() => setStage("topo")} />
-          <MenuItemButton icon="table" label="Services" hint="2" onClick={() => setStage("svc")} />
+        <Dropdown id="m-view" label="视图">
+          <MenuItemButton icon="graph" label="拓扑" hint="1" onClick={() => setStage("topo")} />
+          <MenuItemButton icon="table" label="服务" hint="2" onClick={() => setStage("svc")} />
           <div class="dsep"></div>
-          <MenuItemButton icon="dots-nine" label={grid() ? "Dot grid: on" : "Dot grid: off"}
+          <MenuItemButton icon="dots-nine" label={grid() ? "点阵网格：开" : "点阵网格：关"}
             onClick={() => setGrid(!grid())} />
-          <MenuItemButton icon="arrows-out-simple" label="Fullscreen" hint="F11"
+          <MenuItemButton icon="arrows-out-simple" label="全屏" hint="F11"
             onClick={() => {
               if (document.fullscreenElement) void document.exitFullscreen();
               else void document.documentElement.requestFullscreen();
             }} />
         </Dropdown>
 
-        <Dropdown id="m-help" label="Help">
-          <MenuItemButton icon="keyboard" label="Keyboard and mouse" onClick={() => setShowKeys(true)} />
+        <Dropdown id="m-help" label="帮助">
+          <MenuItemButton icon="keyboard" label="键盘与鼠标" onClick={() => setShowKeys(true)} />
           <div class="dsep"></div>
-          <MenuItemButton icon="info" label="About hayduk" onClick={() => setShowAbout(true)} />
+          <MenuItemButton icon="info" label="关于 hayduk" onClick={() => setShowAbout(true)} />
         </Dropdown>
 
         <span class="spacer"></span>
         <Show when={teamMode()}>
-          <span class="chip" title="Team session: click to change operator name"
+          <span class="chip" title="团队会话：点击修改操作员名称"
             onClick={() => {
               const previous = currentOperator();
               forgetOperator(localStorage);
@@ -283,81 +283,81 @@ export default function App() {
               setOperatorDraft(previous); // prefill the old name to edit
             }}>
             <i aria-hidden="true" class="ph ph-users-three"></i>
-            <b>{operatorName() || "unnamed"}</b> · {(campaignState().operators ?? []).length} live
+            <b>{operatorName() || "未命名"}</b> · {(campaignState().operators ?? []).length} live
           </span>
         </Show>
-        <button class="chip workspace-chip" disabled={conn().status !== "connected"} title="Active workspace: click to switch"
+        <button class="chip workspace-chip" disabled={conn().status !== "connected"} title="当前工作区：点击切换"
           onClick={(e) => void openWorkspaceMenu(e.currentTarget as HTMLElement)}>
-          <i aria-hidden="true" class="ph ph-stack"></i> workspace <b>{conn().workspace || "Not connected"}</b><i aria-hidden="true" class="ph ph-caret-down"></i>
+          <i aria-hidden="true" class="ph ph-stack"></i> 工作区 <b>{conn().workspace || "未连接"}</b><i aria-hidden="true" class="ph ph-caret-down"></i>
         </button>
       </header>
 
       <div class="toolbar">
         <div class="campaign-heading">
-          <div class="eyebrow">METASPLOIT / OPERATIONS</div>
-          <h1>Campaign overview<span class="heading-dot">.</span></h1>
-          <p>Discover hosts, scan services, and manage sessions.</p>
+          <div class="eyebrow">METASPLOIT / 行动</div>
+          <h1>行动概览<span class="heading-dot">.</span></h1>
+          <p>发现主机、扫描服务、管理会话。</p>
         </div>
         <span class="spacer"></span>
         <button class="tbtn" disabled={conn().status !== "connected"} onClick={() => void exportReport()}>
-          <i aria-hidden="true" class="ph ph-download-simple"></i>Export report
+          <i aria-hidden="true" class="ph ph-download-simple"></i>导出报告
         </button>
         <button class="tbtn" disabled={conn().status !== "connected"} onClick={() => setScan("services")}>
-          <i aria-hidden="true" class="ph ph-wifi-high"></i>Scan services
+          <i aria-hidden="true" class="ph ph-wifi-high"></i>扫描服务
         </button>
         <button class="tbtn primary" disabled={conn().status !== "connected"} onClick={() => setScan("discovery")}>
-          <i aria-hidden="true" class="ph ph-plus"></i>Discover hosts
+          <i aria-hidden="true" class="ph ph-plus"></i>发现主机
         </button>
       </div>
 
-      <section class="overview" aria-label="Campaign summary">
+      <section class="overview" aria-label="行动摘要">
         <button class="metric" onClick={() => setStage("topo")}>
           <span class="metric-icon"><i aria-hidden="true" class="ph ph-graph"></i></span>
-          <span class="metric-label">Discovered hosts</span><strong>{campaignState().hosts.length}</strong>
+          <span class="metric-label">已发现主机</span><strong>{campaignState().hosts.length}</strong>
         </button>
         <button class="metric" onClick={() => setStage("svc")}>
           <span class="metric-icon"><i aria-hidden="true" class="ph ph-stack"></i></span>
-          <span class="metric-label">Services</span><strong>{campaignState().services.length}</strong>
+          <span class="metric-label">服务</span><strong>{campaignState().services.length}</strong>
         </button>
         <button class="metric" classList={{ live: liveCount() > 0 }} onClick={() => setTab("sessions")}>
           <span class="metric-icon"><i aria-hidden="true" class="ph ph-broadcast"></i></span>
-          <span class="metric-label">Live sessions</span><strong>{liveCount()}</strong>
+          <span class="metric-label">活动会话</span><strong>{liveCount()}</strong>
         </button>
         <button class="metric" onClick={() => setTab("creds")}>
           <span class="metric-icon"><i aria-hidden="true" class="ph ph-key"></i></span>
-          <span class="metric-label">Credentials</span><strong>{campaignState().creds.length}</strong>
+          <span class="metric-label">凭据</span><strong>{campaignState().creds.length}</strong>
         </button>
       </section>
 
       <aside class="left card">
-        <div class="panelhead"><i aria-hidden="true" class="ph ph-stack"></i><span class="pt">Module library</span>
+        <div class="panelhead"><i aria-hidden="true" class="ph ph-stack"></i><span class="pt">模块库</span>
           <span class="pc">{totalModules().toLocaleString()}</span>
         </div>
-        <p class="panel-description">Select a module to configure its options.</p>
+        <p class="panel-description">选择一个模块以配置其参数。</p>
         <ModuleTree onLaunch={(type, path) => setLaunch({ type, path, host: selectedHost() })} />
       </aside>
 
       <main class="stage card">
         <div class="stagehead">
-          <span class="stage-title">Network map</span>
+          <span class="stage-title">网络地图</span>
           <div class="seg">
             <button aria-pressed={stage() === "topo"} classList={{ on: stage() === "topo" }} onClick={() => setStage("topo")}>
-              <i aria-hidden="true" class="ph ph-graph"></i>Topology
+              <i aria-hidden="true" class="ph ph-graph"></i>拓扑
             </button>
             <button aria-pressed={stage() === "svc"} classList={{ on: stage() === "svc" }} onClick={() => setStage("svc")}>
-              <i aria-hidden="true" class="ph ph-table"></i>Services
+              <i aria-hidden="true" class="ph ph-table"></i>服务
             </button>
           </div>
           <span class="spacer"></span>
           <Show when={stage() === "topo"}>
             <div class="zoomui">
-              <button class="zbtn" aria-label="Zoom out" onClick={() => zoom(-1)}><i aria-hidden="true" class="ph ph-minus"></i></button>
-              <button class="zbtn" aria-label="Zoom in" onClick={() => zoom(1)}><i aria-hidden="true" class="ph ph-plus"></i></button>
-              <button class="zbtn" aria-label="Fit to view" onClick={fit} title="Fit graph to view (F)"><i aria-hidden="true" class="ph ph-corners-out"></i></button>
+              <button class="zbtn" aria-label="缩小" onClick={() => zoom(-1)}><i aria-hidden="true" class="ph ph-minus"></i></button>
+              <button class="zbtn" aria-label="放大" onClick={() => zoom(1)}><i aria-hidden="true" class="ph ph-plus"></i></button>
+              <button class="zbtn" aria-label="适应视图" onClick={fit} title="使拓扑图适应视图 (F)"><i aria-hidden="true" class="ph ph-corners-out"></i></button>
             </div>
           </Show>
-          <button class="graph-focus" aria-pressed={graphFocus()} onClick={() => setGraphFocus(!graphFocus())} title={graphFocus() ? "Return to campaign overview" : "Expand the map and inspector"}>
-            <i aria-hidden="true" class="ph ph-arrows-out-simple"></i>{graphFocus() ? "Exit focus" : "Focus"}
+          <button class="graph-focus" aria-pressed={graphFocus()} onClick={() => setGraphFocus(!graphFocus())} title={graphFocus() ? "返回行动概览" : "展开地图与检查器"}>
+            <i aria-hidden="true" class="ph ph-arrows-out-simple"></i>{graphFocus() ? "退出专注模式" : "专注"}
           </button>
         </div>
         <div class="stagebody" classList={{ gridbg: stage() === "topo" && grid() }}>
@@ -366,24 +366,24 @@ export default function App() {
               onInteract={openInteract}
               onLaunch={(host) => {
                 setSelectedHost(host);
-                flash(`host ${host} selected; right-click a module in the tree to launch against it`);
+                flash(`已选择主机 ${host}；右键单击模块树中的模块即可对其发起攻击`);
               }}
               onLogin={(host) => { setSelectedHost(host); setLoginHost(host); }} />
             <Show when={campaignState().hosts.length === 0}>
               <div class="map-empty">
                 <div class="empty-symbol"><i aria-hidden="true" class="ph ph-graph"></i></div>
-                <h2>No hosts discovered</h2>
-                <p>Discover hosts to map services, sessions, and routes.</p>
+                <h2>尚未发现主机</h2>
+                <p>发现主机，以绘制服务、会话与路由。</p>
                 <button class="tbtn primary" disabled={conn().status !== "connected"} onClick={() => setScan("discovery")}>
-                  <i aria-hidden="true" class="ph ph-plus"></i>Discover hosts
+                  <i aria-hidden="true" class="ph ph-plus"></i>发现主机
                 </button>
               </div>
             </Show>
             <div class="legend">
-              <span><i class="sw neutral"></i>Discovered</span>
-              <span><i class="sw dot"></i>Live session</span>
-              <span><i class="sw sq"></i>Login available</span>
-              <span><i class="sw dash"></i>Pivot route</span>
+              <span><i class="sw neutral"></i>已发现</span>
+              <span><i class="sw dot"></i>活动会话</span>
+              <span><i class="sw sq"></i>可登录</span>
+              <span><i class="sw dash"></i>跳板路由</span>
             </div>
           </div>
           <div class="view" hidden={stage() !== "svc"}>
@@ -393,7 +393,7 @@ export default function App() {
       </main>
 
       <aside class="right card">
-        <div class="panelhead"><i aria-hidden="true" class="ph ph-target"></i><span class="pt">Host details</span><span class="panel-kicker">INSPECTOR</span></div>
+        <div class="panelhead"><i aria-hidden="true" class="ph ph-target"></i><span class="pt">主机详情</span><span class="panel-kicker">检查器</span></div>
         <Inspector addr={selectedHost} onInteract={openInteract} onLogin={setLoginHost} />
       </aside>
 
@@ -414,7 +414,7 @@ export default function App() {
         <div class="nbbody">
           <div class="nbpane" hidden={tab() !== "console"}>
             <ConsoleView output={consoleOutput} prompt={consolePrompt()} busy={consoleBusy()}
-              write={(cmd) => void write(cmd).catch((e: any) => flash(e?.message ?? "console write failed"))}
+              write={(cmd) => void write(cmd).catch((e: any) => flash(e?.message ?? "控制台写入失败"))}
               tabComplete={(line) => consoleTabs(line).catch(() => [])} />
           </div>
           <div class="nbpane" hidden={tab() !== "interact"}><InteractView /></div>
@@ -425,7 +425,7 @@ export default function App() {
             <JobsView onOpenModule={(module) => {
               setTab("console");
               void write(`use ${module}`)
-                .catch((e: any) => flash(e?.message ?? "console write failed"));
+                .catch((e: any) => flash(e?.message ?? "控制台写入失败"));
             }} />
           </div>
           <div class="nbpane" hidden={tab() !== "creds"}><CredsView /></div>
@@ -436,13 +436,13 @@ export default function App() {
 
       <footer class="status card">
         <i aria-hidden="true" class={`ph ${conn().status === "connected" ? "ph-wifi-high wifi" : "ph-wifi-slash"}`}
-           title="RPC link to the framework"></i>
+           title="与框架的 RPC 连接"></i>
         <span>
           {conn().status === "connected"
-            ? `msfrpcd connected · metasploit ${conn().msfVersion}`
+            ? `msfrpcd 已连接 · metasploit ${conn().msfVersion}`
             : conn().status === "reconnecting"
-              ? "reconnecting…"
-              : "disconnected"}
+              ? "正在重连…"
+              : "已断开"}
         </span>
         <Show when={conn().host}>
           <span class="addr">{conn().host}:{conn().port}</span>
@@ -492,13 +492,12 @@ export default function App() {
       </Show>
 
       <Show when={showAbout()}>
-        <Modal title="About hayduk" onClose={() => setShowAbout(false)}>
+        <Modal title="关于 hayduk" onClose={() => setShowAbout(false)}>
           <div style="margin-top:10px; display:flex; align-items:center; gap:14px">
             <HaydukMark size={44} tile />
             <div>
               <p style="margin:2px 0 0; font:400 12px/1.55 var(--sans); color:var(--tx1)">
-                Graphical attack management console for Metasploit. Runs as a single Go binary
-                with a browser UI. For authorized security testing only.
+                Metasploit 图形化攻击管理控制台。以单个 Go 二进制运行，界面在浏览器中。仅限授权安全测试使用。
               </p>
             </div>
           </div>
@@ -506,41 +505,41 @@ export default function App() {
             Hayduk {serverVersion() || ""} · jolovicdev · MIT · Assisted by: GLM 5.3
           </p>
           <div class="mbtns">
-            <button class="abtn" onClick={() => setShowAbout(false)}>Close</button>
+            <button class="abtn" onClick={() => setShowAbout(false)}>关闭</button>
           </div>
         </Modal>
       </Show>
 
       <Show when={showKeys()}>
-        <Modal title="Keyboard and mouse" onClose={() => setShowKeys(false)}>
+        <Modal title="键盘与鼠标" onClose={() => setShowKeys(false)}>
           <div class="klist">
-            <div class="krow"><span class="keys"><kbd>1</kbd><kbd>2</kbd></span>Switch between Topology and Services</div>
-            <div class="krow"><span class="keys"><kbd>F</kbd></span>Fit the graph to the view</div>
-            <div class="krow"><span class="keys"><kbd>Esc</kbd></span>Close menus and dialogs</div>
-            <div class="krow"><span class="keys"><kbd>R-click</kbd></span>Context actions on hosts, modules and table rows</div>
-            <div class="krow"><span class="keys"><kbd>Drag</kbd></span>Move nodes, or pan the canvas by its background</div>
-            <div class="krow"><span class="keys"><kbd>Wheel</kbd></span>Zoom the graph</div>
-            <div class="krow"><span class="keys"><kbd>Tab</kbd></span>Complete console commands</div>
+            <div class="krow"><span class="keys"><kbd>1</kbd><kbd>2</kbd></span>在拓扑与服务之间切换</div>
+            <div class="krow"><span class="keys"><kbd>F</kbd></span>使拓扑图适应视图</div>
+            <div class="krow"><span class="keys"><kbd>Esc</kbd></span>关闭菜单与对话框</div>
+            <div class="krow"><span class="keys"><kbd>右键</kbd></span>对主机、模块与表格行的右键操作</div>
+            <div class="krow"><span class="keys"><kbd>拖动</kbd></span>拖动节点，或拖拽画布空白处平移</div>
+            <div class="krow"><span class="keys"><kbd>滚轮</kbd></span>缩放拓扑图</div>
+            <div class="krow"><span class="keys"><kbd>Tab</kbd></span>补全控制台命令</div>
           </div>
           <div class="mbtns">
-            <button class="abtn" onClick={() => setShowKeys(false)}>Close</button>
+            <button class="abtn" onClick={() => setShowKeys(false)}>关闭</button>
           </div>
         </Modal>
       </Show>
 
       <Show when={teamMode() && !operatorName()}>
-        <Modal title="Who is operating?" onClose={() => setOperatorDraft("")}>
+        <Modal title="谁在操作？" onClose={() => setOperatorDraft("")}>
           <p style="margin-top:4px; font:400 12px/1.55 var(--sans); color:var(--tx2)">
-            This Hayduk runs as a team server. Your name rides along on every command and lands
-            next to your actions in the shared event log.
+            此 Hayduk 以团队服务器模式运行。你的名字会随每条命令一并记录，
+            并显示在共享事件日志中对应操作的旁边。
           </p>
-          <input style="margin-top:14px" value={operatorDraft()} placeholder="operator name"
+          <input style="margin-top:14px" value={operatorDraft()} placeholder="操作员名称"
             onInput={(e) => setOperatorDraft(e.currentTarget.value)}
             onKeyDown={(e) => { if (e.key === "Enter" && operatorDraft().trim()) commitOperator(); }}
             autocomplete="off" spellcheck={false} />
           <div class="mbtns">
             <button class="abtn" style="flex:none; padding:0 20px"
-              disabled={!operatorDraft().trim()} onClick={commitOperator}>Join</button>
+              disabled={!operatorDraft().trim()} onClick={commitOperator}>加入</button>
           </div>
         </Modal>
       </Show>
@@ -548,8 +547,8 @@ export default function App() {
       <Show when={wsStatus() === "closed" && !protoMismatch()}>
         <div class="modalback show">
           <div class="modal" style="width:340px; text-align:center">
-            <div class="mtitle" style="text-align:center">Connection to Hayduk lost</div>
-            <p>Reconnecting automatically…</p>
+            <div class="mtitle" style="text-align:center">与 Hayduk 的连接已断开</div>
+            <p>正在自动重连…</p>
           </div>
         </div>
       </Show>
@@ -557,9 +556,8 @@ export default function App() {
       <Show when={protoMismatch()}>
         <div class="modalback show">
           <div class="modal" style="width:360px; text-align:center">
-            <div class="mtitle" style="text-align:center">Incompatible Hayduk server</div>
-            <p>This UI speaks protocol v1 but the server answered with a different version.
-               Restart both from the same build.</p>
+            <div class="mtitle" style="text-align:center">Hayduk 服务端版本不兼容</div>
+            <p>此界面使用协议 v1，但服务端返回了不同版本。请用同一份构建重启前后端。</p>
           </div>
         </div>
       </Show>

@@ -9,9 +9,9 @@ export function LootView() {
     <DataTable
       rows={rows()}
       rowKey={(r) => `${r.host}:${r.type}:${r.name}`}
-      emptyTitle="No loot"
+      emptyTitle="暂无战利品"
       emptyIcon="archive"
-      empty="Captured files and tokens appear here."
+      empty="抓取到的文件与令牌会显示在这里。"
       columns={[
         { key: "host", label: "HOST", mono: true },
         { key: "type", label: "TYPE", mono: true },

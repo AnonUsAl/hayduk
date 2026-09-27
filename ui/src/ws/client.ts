@@ -57,7 +57,7 @@ export function createWS(): WSClient {
       try {
         msg = JSON.parse(ev.data);
       } catch {
-        console.warn("unparseable ws message", ev.data);
+        console.warn("无法解析的 ws 消息", ev.data);
         return;
       }
       if (msg?.type === "hello") {
@@ -82,12 +82,12 @@ export function createWS(): WSClient {
       if (msg?.type) {
         handlers.get(msg.type)?.forEach(h => h(msg));
       } else {
-        console.warn("ws message without type", msg);
+        console.warn("缺少 type 字段的 ws 消息", msg);
       }
     });
     sock.addEventListener("close", () => {
       state.status = "closed";
-      const err = new CommandError("disconnected", "connection to hayduk lost");
+      const err = new CommandError("已断开", "与 hayduk 的连接已断开");
       for (const p of pending.values()) {
         p.reject(err);
       }
@@ -109,7 +109,7 @@ export function createWS(): WSClient {
         // sending on a half-open socket throws or vanishes; fail fast so
         // callers see a rejection instead of a promise that never settles
         if (!sock || sock.readyState !== 1) {
-          reject(new CommandError("disconnected", "connection to hayduk is not open"));
+          reject(new CommandError("已断开", "与 hayduk 的连接尚未建立"));
           return;
         }
         pending.set(id, { resolve, reject });
@@ -120,7 +120,7 @@ export function createWS(): WSClient {
           }));
         } catch (err: any) {
           pending.delete(id);
-          reject(new CommandError("disconnected", `send failed: ${err?.message ?? err}`));
+          reject(new CommandError("已断开", `发送失败：${err?.message ?? err}`));
         }
       });
     },
